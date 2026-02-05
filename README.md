@@ -2,22 +2,12 @@
 <br></br>
 
 
-Install Node.js, VSC, Git
+Files/Folders per new page
 
-INSTALL PNPM: npm install -g pnpm
+src/features/<feature>/ui/<Page>.tsx → page component
 
+src/routes/<feature>.tsx → thin route
 
-RUN DEV LOCAL SERVER: pnpm dev
+Update src/routes/__root.tsx → add new route
 
-
-HOW TO PUSH TO GITHUB:
-
-- Make sure you are a collaborator in GitHub.
-
-- $ git init
-
-- $ git add .
-
-- $ git commit -m "Put whatever you changed/added in these quotation marks"
-
-- $ git remote add origin https://github.com/Username000000044/cac_team/tree/main
+(Optional) src/features/<feature>/ui/index.ts → barrel
