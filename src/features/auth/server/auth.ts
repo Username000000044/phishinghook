@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth'
 import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { Pool } from 'pg';
+import { oneTap } from "better-auth/plugins"; 
 
 export const auth = betterAuth({
   database: new Pool({
@@ -9,5 +10,5 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [tanstackStartCookies()],
+  plugins: [oneTap(), tanstackStartCookies()],
 });

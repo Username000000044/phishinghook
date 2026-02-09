@@ -6,9 +6,11 @@ export function AuthPage() {
   return (
     <div className="container flex flex-col h-screen">
       <div className="flex flex-1 justify-center items-center">
-        <div className="grid grid-cols-3 max-h-170 h-full w-full gap-4">
+        <div className="flex justify-center md:grid md:grid-cols-3 md:gap-4 max-h-170 h-full w-full">
           {/* Image */}
-          <div className="col-span-2 border rounded-2xl">Image</div>
+          <div className="hidden md:flex md:col-span-2 border rounded-2xl">
+            Image
+          </div>
 
           {/* Login / Signup */}
           <div className="p-5 w-full h-full max-w-100">
@@ -23,7 +25,7 @@ export function AuthPage() {
             </div>
 
             {/* Log In */}
-            <div className="flex flex-col justify-center h-full">
+            <div className="flex flex-col justify-center h-full w-full">
               <LoginForm />
             </div>
           </div>

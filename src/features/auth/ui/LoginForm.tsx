@@ -12,6 +12,8 @@ import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
+import { authClient } from "../client/auth-client";
+import { useEffect, useRef } from "react";
 
 const formSchema = z.object({
   email: z.email(),
@@ -20,6 +22,34 @@ const formSchema = z.object({
     .min(8, "Password must be at least 8 characters.")
     .max(128, "Password exceeds 128 character limit."),
 });
+
+function SignInButton() {
+  const buttonRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (buttonRef.current) {
+      authClient.oneTap({
+        button: {
+          container: buttonRef.current,
+          config: {
+            theme: "filled_black",
+            size: "medium",
+            type: "standard",
+          },
+        },
+        // fetchOptions: {
+        //   onSuccess: () => {
+        //     throw redirect({
+        //       to: "/dashboard",
+        //     });
+        //   },
+        // },
+      });
+    }
+  }, []);
+
+  return <div ref={buttonRef}></div>;
+}
 
 export function LoginForm() {
   const form = useForm({
@@ -131,12 +161,7 @@ export function LoginForm() {
           <hr className="bg-muted w-full h-[1px]" />
         </div>
 
-        {/* <Button
-          type="button"
-          className="w-full bg-transparent border border-destructive text-destructive"
-        >
-          Google
-        </Button> */}
+        <SignInButton />
       </CardFooter>
     </Card>
   );
