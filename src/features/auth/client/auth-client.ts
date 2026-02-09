@@ -4,9 +4,10 @@ import { oneTapClient } from "better-auth/client/plugins";
 export const authClient = createAuthClient({
     plugins: [
         oneTapClient({
-            clientId: process.env.GOOGLE_CLIENT_ID as string,
+            clientId: import.meta.env.VITE_GOOGLE_CLIENT_ID as string,
             autoSelect: false,
             cancelOnTapOutside: true,
+            context: "signin",
         })
     ]
 })
