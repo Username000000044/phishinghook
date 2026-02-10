@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Link } from "@tanstack/react-router";
+import { Link, redirect } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { authClient } from "../client/auth-client";
 import { useEffect, useRef } from "react";
@@ -37,13 +37,11 @@ function SignInButton() {
             type: "standard",
           },
         },
-        // fetchOptions: {
-        //   onSuccess: () => {
-        //     throw redirect({
-        //       to: "/dashboard",
-        //     });
-        //   },
-        // },
+        fetchOptions: {
+          onSuccess: () => {
+            console.log("AUTHENTICATED");
+          },
+        },
       });
     }
   }, []);
