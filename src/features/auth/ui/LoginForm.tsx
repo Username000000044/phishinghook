@@ -1,4 +1,3 @@
-import * as z from "zod";
 import { useForm } from "@tanstack/react-form";
 import {
   Card,
@@ -10,44 +9,11 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Link, redirect } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { authClient } from "../client/auth-client";
-import { useEffect, useRef } from "react";
-
-const formSchema = z.object({
-  email: z.email(),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters.")
-    .max(128, "Password exceeds 128 character limit."),
-});
-
-function SignInButton() {
-  const buttonRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (buttonRef.current) {
-      authClient.oneTap({
-        button: {
-          container: buttonRef.current,
-          config: {
-            theme: "filled_black",
-            size: "medium",
-            type: "standard",
-          },
-        },
-        fetchOptions: {
-          onSuccess: () => {
-            console.log("AUTHENTICATED");
-          },
-        },
-      });
-    }
-  }, []);
-
-  return <div ref={buttonRef}></div>;
-}
+import { GoogleOneTap } from "./components/GoogleOneTap";
+import { loginSchema } from "../schemas/auth.schema";
+import { AuthField } from "./components/AuthField";
 
 export function LoginForm() {
   const form = useForm({
@@ -56,7 +22,7 @@ export function LoginForm() {
       password: "",
     },
     validators: {
-      onSubmit: formSchema,
+      onSubmit: loginSchema,
     },
     onSubmit: async ({ value }) => {
       console.log(value);
@@ -85,60 +51,26 @@ export function LoginForm() {
           }}
         >
           <FieldGroup className="gap-0 space-y-4">
-            <form.Field
-              name="email"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <Input
-                      className="h-10 rounded-none"
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Email Address"
-                      type="text"
-                      aria-invalid={isInvalid}
-                      autoComplete="on"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            ></form.Field>
-            <form.Field
-              name="password"
-              children={(field) => {
-                const isInvalid =
-                  field.state.meta.isTouched && !field.state.meta.isValid;
-
-                return (
-                  <Field data-invalid={isInvalid}>
-                    <Input
-                      className="h-10 rounded-none"
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(e) => field.handleChange(e.target.value)}
-                      placeholder="Password"
-                      type="password"
-                      aria-invalid={isInvalid}
-                      autoComplete="pff"
-                    />
-                    {isInvalid && (
-                      <FieldError errors={field.state.meta.errors} />
-                    )}
-                  </Field>
-                );
-              }}
-            ></form.Field>
+            <form.Field name="email">
+              {/* data from parent is auto passed down as a prop named children */}
+              {(field) => (
+                <AuthField
+                  field={field}
+                  placeholder="Email Address"
+                  autoComplete="email"
+                />
+              )}
+            </form.Field>
+            <form.Field name="password">
+              {(field) => (
+                <AuthField
+                  field={field}
+                  type="password"
+                  placeholder="Password"
+                  autoComplete="current-password"
+                />
+              )}
+            </form.Field>
           </FieldGroup>
         </form>
       </CardContent>
@@ -159,7 +91,7 @@ export function LoginForm() {
           <hr className="bg-muted w-full h-[1px]" />
         </div>
 
-        <SignInButton />
+        <GoogleOneTap />
       </CardFooter>
     </Card>
   );

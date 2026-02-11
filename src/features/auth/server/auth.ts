@@ -3,7 +3,7 @@ import { tanstackStartCookies } from 'better-auth/tanstack-start'
 import { oneTap } from "better-auth/plugins"; 
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@db/index"
-import * as schema from "@/features/auth/db/schema"
+import * as schema from "@/features/auth/schemas/auth.sql"
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -11,7 +11,7 @@ export const auth = betterAuth({
     schema: schema,
   }),
   advanced: {
-    cookiePrefix: "phishing-hook"
+    cookiePrefix: "ph"
   },
   socialProviders: {
         google: { 

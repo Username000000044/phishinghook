@@ -26,7 +26,6 @@
     "@tanstack/react-router-ssr-query": "^1.159.3",
     "@tanstack/react-start": "^1.159.3",
     "@tanstack/router-plugin": "^1.159.3",
-    "argon2": "^0.44.0",
     "better-auth": "^1.4.18",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

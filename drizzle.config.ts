@@ -7,7 +7,7 @@ config({ path: ['.env'] })
 // Main drizzle config
 export default defineConfig({
   out: './src/db/migrations',
-  schema: './src/features/**/db/schema.ts',
+  schema: './src/features/**/schemas/*.sql.ts',
   dialect: 'postgresql',
   dbCredentials: {
     url: process.env.DATABASE_URL!,
