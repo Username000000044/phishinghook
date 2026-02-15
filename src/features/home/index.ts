@@ -1,2 +1,2 @@
 // Barrel File
-export * from './ui/HomePage'
+export { HomePage } from './ui/HomePage'

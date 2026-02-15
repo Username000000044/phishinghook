@@ -1,10 +1,9 @@
-import { useNavigate } from "@tanstack/react-router";
+import { redirect } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { authClient } from "../../client/auth-client";
 
 export function GoogleOneTap() {
   const buttonRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (buttonRef.current) {
@@ -19,12 +18,12 @@ export function GoogleOneTap() {
         },
         fetchOptions: {
           onSuccess: () => {
-            navigate({ to: "/dashboard" });
+            throw redirect({ to: "/dashboard" });
           },
         },
       });
     }
-  }, [navigate]);
+  });
 
   return <div ref={buttonRef}></div>;
 }

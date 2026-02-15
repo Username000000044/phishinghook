@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
-import { LoginForm } from "./LoginForm";
+import { SignUpForm } from "./components/SignUpForm";
 
-export function AuthPage() {
+export function SignUpPage() {
   return (
     <div className="container flex flex-col h-screen">
       <div className="flex flex-1 justify-center items-center">
@@ -17,16 +17,16 @@ export function AuthPage() {
             {/* Sign up */}
             <div className="flex justify-end-safe items-center gap-4">
               <p className="text-muted-foreground text-sm">
-                Don't have an account?
+                Already have an account?
               </p>
               <Button variant="outline" size="sm" asChild>
-                <Link to=".">Sign Up</Link>
+                <Link to="/auth/login">Log In</Link>
               </Button>
             </div>
 
             {/* Log In */}
             <div className="flex flex-col justify-center h-full w-full">
-              <LoginForm />
+              <SignUpForm />
             </div>
           </div>
         </div>

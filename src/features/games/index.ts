@@ -1,2 +1,2 @@
-export * from "./email/ui/EmailGamePage"
-export * from "./url/ui/URLGamePage"
+export { EmailGamePage } from "./email/ui/EmailGamePage"
+export {  URLGamePage } from "./url/ui/URLGamePage"

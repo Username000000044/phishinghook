@@ -7,13 +7,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Field, FieldError, FieldGroup } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Field, FieldGroup } from "@/components/ui/field";
 import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { GoogleOneTap } from "./components/GoogleOneTap";
-import { loginSchema } from "../schemas/auth.schema";
-import { AuthField } from "./components/AuthField";
+import { GoogleOneTap } from "./GoogleOneTap";
+import { loginSchema } from "../../schemas/auth.schema";
+import { AuthField } from "./AuthField";
 
 export function LoginForm() {
   const form = useForm({
@@ -23,14 +22,12 @@ export function LoginForm() {
     },
     validators: {
       onSubmit: loginSchema,
+      onSubmitAsync: async ({ value }) => {
+        // value.
+      },
     },
-    onSubmit: async ({ value }) => {
-      console.log(value);
-      //submit logic (not in order)
-      //db (integrate salt + hash)
-      //betterAuth integrate
-      //redirect
-      //sql inject problems
+    onSubmit: ({ value }) => {
+      // return console.log(`email: ${value.email} password: ${value.password}`);
     },
   });
 
@@ -58,16 +55,6 @@ export function LoginForm() {
                   field={field}
                   placeholder="Email Address"
                   autoComplete="email"
-                />
-              )}
-            </form.Field>
-            <form.Field name="password">
-              {(field) => (
-                <AuthField
-                  field={field}
-                  type="password"
-                  placeholder="Password"
-                  autoComplete="current-password"
                 />
               )}
             </form.Field>

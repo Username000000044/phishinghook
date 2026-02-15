@@ -1,2 +1,4 @@
-export * from './ui/AuthPage'
+export { LoginPage } from './ui/LoginPage'
+export { SignUpPage } from './ui/SignUpPage'
+
 

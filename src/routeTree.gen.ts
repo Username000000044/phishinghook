@@ -11,12 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
-import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as GamesUrlRouteImport } from './routes/games/url'
 import { Route as GamesEmailRouteImport } from './routes/games/email'
 import { Route as MarketingResourcesRouteImport } from './routes/_marketing/resources'
 import { Route as MarketingProductsRouteImport } from './routes/_marketing/products'
 import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
+import { Route as AuthSignupIndexRouteImport } from './routes/auth/signup/index'
+import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -27,11 +28,6 @@ const IndexRoute = IndexRouteImport.update({
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthIndexRoute = AuthIndexRouteImport.update({
-  id: '/auth/',
-  path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesUrlRoute = GamesUrlRouteImport.update({
@@ -59,6 +55,16 @@ const MarketingPricingRoute = MarketingPricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthSignupIndexRoute = AuthSignupIndexRouteImport.update({
+  id: '/auth/signup/',
+  path: '/auth/signup/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
+  id: '/auth/login/',
+  path: '/auth/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -72,9 +78,10 @@ export interface FileRoutesByFullPath {
   '/resources': typeof MarketingResourcesRoute
   '/games/email': typeof GamesEmailRoute
   '/games/url': typeof GamesUrlRoute
-  '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/auth/login/': typeof AuthLoginIndexRoute
+  '/auth/signup/': typeof AuthSignupIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -83,9 +90,10 @@ export interface FileRoutesByTo {
   '/resources': typeof MarketingResourcesRoute
   '/games/email': typeof GamesEmailRoute
   '/games/url': typeof GamesUrlRoute
-  '/auth': typeof AuthIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/auth/login': typeof AuthLoginIndexRoute
+  '/auth/signup': typeof AuthSignupIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,9 +103,10 @@ export interface FileRoutesById {
   '/_marketing/resources': typeof MarketingResourcesRoute
   '/games/email': typeof GamesEmailRoute
   '/games/url': typeof GamesUrlRoute
-  '/auth/': typeof AuthIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/auth/login/': typeof AuthLoginIndexRoute
+  '/auth/signup/': typeof AuthSignupIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -108,9 +117,10 @@ export interface FileRouteTypes {
     | '/resources'
     | '/games/email'
     | '/games/url'
-    | '/auth/'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/auth/login/'
+    | '/auth/signup/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -119,9 +129,10 @@ export interface FileRouteTypes {
     | '/resources'
     | '/games/email'
     | '/games/url'
-    | '/auth'
     | '/dashboard'
     | '/api/auth/$'
+    | '/auth/login'
+    | '/auth/signup'
   id:
     | '__root__'
     | '/'
@@ -130,9 +141,10 @@ export interface FileRouteTypes {
     | '/_marketing/resources'
     | '/games/email'
     | '/games/url'
-    | '/auth/'
     | '/dashboard/'
     | '/api/auth/$'
+    | '/auth/login/'
+    | '/auth/signup/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -142,9 +154,10 @@ export interface RootRouteChildren {
   MarketingResourcesRoute: typeof MarketingResourcesRoute
   GamesEmailRoute: typeof GamesEmailRoute
   GamesUrlRoute: typeof GamesUrlRoute
-  AuthIndexRoute: typeof AuthIndexRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -161,13 +174,6 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth/': {
-      id: '/auth/'
-      path: '/auth'
-      fullPath: '/auth/'
-      preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/url': {
@@ -205,6 +211,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingPricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/signup/': {
+      id: '/auth/signup/'
+      path: '/auth/signup'
+      fullPath: '/auth/signup/'
+      preLoaderRoute: typeof AuthSignupIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login/': {
+      id: '/auth/login/'
+      path: '/auth/login'
+      fullPath: '/auth/login/'
+      preLoaderRoute: typeof AuthLoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -222,9 +242,10 @@ const rootRouteChildren: RootRouteChildren = {
   MarketingResourcesRoute: MarketingResourcesRoute,
   GamesEmailRoute: GamesEmailRoute,
   GamesUrlRoute: GamesUrlRoute,
-  AuthIndexRoute: AuthIndexRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthSignupIndexRoute: AuthSignupIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { LandingPage } from '@features/home'
+import { createFileRoute } from "@tanstack/react-router";
+import { HomePage } from "@features/home";
 
-export const Route = createFileRoute('/')({ component: LandingPage })
+export const Route = createFileRoute("/")({ component: HomePage });
