@@ -8,6 +8,7 @@ export const loginSchema = z.object({
     .min(8, "Password must be at least 8 characters.")
     .max(128, "Password exceeds 128 character limit."),
 });
+
 // Signup Schema
 export const signUpSchema = z.object({
   username: z
@@ -16,6 +17,10 @@ export const signUpSchema = z.object({
     .max(35, "Username exceeds 35 character limit")
     .regex(/^[a-zA-Z0-9_]+$/, "Only (a-z, 0-9, _) characters supported."),
   email: z.email(),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters.")
+    .max(128, "Password exceeds 128 character limit."),
 });
 
 export type LoginInput = z.infer<typeof loginSchema>

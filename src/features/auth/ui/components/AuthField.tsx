@@ -1,11 +1,19 @@
+import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+} from "@/components/ui/input-group";
 import { AnyFieldApi } from "@tanstack/react-form";
+import { EyeOffIcon, EyeIcon } from "lucide-react";
+import { useState } from "react";
 
 interface AuthFieldProps {
   field: AnyFieldApi;
   placeholder?: string;
-  type?: "text";
+  type?: "text" | "password" | "email";
   autoComplete: string;
 }
 
@@ -32,21 +40,56 @@ export function AuthField({
     field.state.meta.isTouched && field.state.meta.errors.length
   );
 
-  return (
-    <Field data-invalid={isInvalid}>
-      <Input
-        className="h-10 rounded-none"
-        id={field.name}
-        name={field.name}
-        value={field.state.value}
-        onBlur={field.handleBlur}
-        onChange={(e) => field.handleChange(e.target.value)}
-        placeholder={placeholder}
-        type={type}
-        aria-invalid={isInvalid}
-        autoComplete={autoComplete}
-      />
-      {isInvalid && <FieldError>{errorMessages.join(", ")}</FieldError>}
-    </Field>
-  );
+  const [visible, setVisible] = useState(false);
+
+  if (type == "password") {
+    return (
+      <Field data-invalid={isInvalid}>
+        <InputGroup className="rounded-none h-10">
+          <InputGroupInput
+            id={field.name}
+            name={field.name}
+            value={field.state.value}
+            onBlur={field.handleBlur}
+            onChange={(e) => field.handleChange(e.target.value)}
+            placeholder={placeholder}
+            type={visible ? "text" : "password"}
+            aria-invalid={isInvalid}
+            autoComplete={autoComplete}
+          />
+          <InputGroupAddon align="inline-end">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon-sm"
+              className="hover:cursor-pointer"
+              onClick={() => setVisible(!visible)}
+            >
+              {visible ? <EyeIcon /> : <EyeOffIcon />}
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
+
+        {isInvalid && <FieldError>{errorMessages.join(", ")}</FieldError>}
+      </Field>
+    );
+  } else {
+    return (
+      <Field data-invalid={isInvalid}>
+        <Input
+          className="h-10 rounded-none"
+          id={field.name}
+          name={field.name}
+          value={field.state.value}
+          onBlur={field.handleBlur}
+          onChange={(e) => field.handleChange(e.target.value)}
+          placeholder={placeholder}
+          type={type}
+          aria-invalid={isInvalid}
+          autoComplete={autoComplete}
+        />
+        {isInvalid && <FieldError>{errorMessages.join(", ")}</FieldError>}
+      </Field>
+    );
+  }
 }

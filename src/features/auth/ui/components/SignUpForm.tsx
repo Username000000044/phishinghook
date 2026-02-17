@@ -23,6 +23,7 @@ export function SignUpForm() {
     defaultValues: {
       username: "",
       email: "",
+      password: "",
     },
     validators: {
       onSubmit: signUpSchema,
@@ -77,8 +78,19 @@ export function SignUpForm() {
               {(field) => (
                 <AuthField
                   field={field}
+                  type="email"
                   placeholder="Email"
                   autoComplete="email"
+                />
+              )}
+            </form.Field>
+            <form.Field name="password">
+              {(field) => (
+                <AuthField
+                  field={field}
+                  type="password"
+                  placeholder="Password"
+                  autoComplete="new-password"
                 />
               )}
             </form.Field>

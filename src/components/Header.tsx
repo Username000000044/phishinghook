@@ -83,7 +83,7 @@ export default function Header() {
           <Link to="/">Get Started</Link>
         </Button>
         <Button asChild>
-          <Link to="/auth/login">Sign in</Link>
+          <Link to="/auth/signup">Sign up</Link>
         </Button>
       </div>
     </div>
