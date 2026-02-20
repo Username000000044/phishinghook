@@ -1,5 +1,4 @@
 import { useForm } from "@tanstack/react-form";
-import { useRouter } from "@tanstack/react-router";
 import {
   Card,
   CardContent,
@@ -13,12 +12,17 @@ import { Button } from "@/components/ui/button";
 import { GoogleOneTap } from "./GoogleOneTap";
 import { AuthField } from "./AuthField";
 import { signUpSchema } from "../../schemas/auth.schema";
-import { isEmailTaken } from "../../server/actions";
+import { isEmailTaken, sendOTP, signUp } from "../../server/actions";
 import { LoadingSwap } from "@/components/ui/loading-swap";
+import { Dispatch, SetStateAction } from "react";
+import { StepType } from "../SignUpPage";
 
-export function SignUpForm() {
-  const router = useRouter();
+type ChildProps = {
+  setCurrentStep: Dispatch<SetStateAction<StepType>>;
+  currentStep: string;
+};
 
+export function SignUpForm({ setCurrentStep, currentStep }: ChildProps) {
   const form = useForm({
     defaultValues: {
       username: "",
@@ -28,21 +32,38 @@ export function SignUpForm() {
     validators: {
       onSubmit: signUpSchema,
       onSubmitAsync: async ({ value }) => {
-        const taken = await isEmailTaken({ data: value.email });
+        const email = await isEmailTaken({ data: value.email });
 
-        if (taken) {
+        if (email.exists)
           return {
             fields: {
               email: "This email is already in use",
             },
           };
-        }
 
         return undefined;
       },
     },
-    onSubmit: async () => {
-      await router.navigate({ to: "/dashboard" });
+    onSubmit: async ({ value }) => {
+      try {
+        // 1. Enter User into DB
+        await signUp(value);
+
+        // 2. Verify User Email Using OTP
+        const otp = await sendOTP({ data: value });
+        if (otp?.success) setCurrentStep("otp"); // If OTP sent successfully, change stage to OTP
+
+        // 3.
+        //
+        //
+      } catch (error) {
+        // Better Auth errors should be handled within the each async function ^.
+        if (error instanceof Error) {
+          console.error(error.message);
+        } else {
+          console.error(`An unknown error occured:`, error);
+        }
+      }
     },
   });
 
@@ -51,8 +72,8 @@ export function SignUpForm() {
       <CardHeader className="text-center p-0 space-y-2">
         <CardTitle className="text-2xl">Sign Up for PhishHook</CardTitle>
         <CardDescription className="text-muted-foreground">
-          Welcome to PhishHook, please enter sign up details to use the app. An
-          OTP and a Passkey is used for authentication!
+          Welcome to PhishHook, please enter sign up details and verify your
+          email to use the app.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
@@ -70,7 +91,7 @@ export function SignUpForm() {
                 <AuthField
                   field={field}
                   placeholder="Username"
-                  autoComplete="text"
+                  autoComplete="name"
                 />
               )}
             </form.Field>
@@ -78,7 +99,6 @@ export function SignUpForm() {
               {(field) => (
                 <AuthField
                   field={field}
-                  type="email"
                   placeholder="Email"
                   autoComplete="email"
                 />
@@ -108,7 +128,7 @@ export function SignUpForm() {
                 className="cursor-pointer"
                 disabled={isSubmitting}
               >
-                <LoadingSwap isLoading={isSubmitting}>Login</LoadingSwap>
+                <LoadingSwap isLoading={isSubmitting}>Sign Up</LoadingSwap>
               </Button>
             </Field>
           )}

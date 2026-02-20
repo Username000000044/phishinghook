@@ -1,5 +1,6 @@
 import { createAuthClient } from 'better-auth/react'
-import { oneTapClient, emailOTPClient } from "better-auth/client/plugins";
+import { emailOTPClient, oneTapClient } from "better-auth/client/plugins";
+import { emailOTP } from 'better-auth/plugins';
 
 export const authClient = createAuthClient({
     baseURL: import.meta.env.BETTER_AUTH_URL,

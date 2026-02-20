@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { OTPForm } from "./components/OTPForm";
 import { SignUpForm } from "./components/SignUpForm";
 
+export type StepType = "credentials" | "otp";
+
 export function SignUpPage() {
+  const [currentStep, setCurrentStep] = useState<StepType>("credentials");
+
   return (
     <div className="container flex flex-col h-screen">
       <div className="flex flex-1 justify-center items-center">
@@ -26,7 +32,14 @@ export function SignUpPage() {
 
             {/* Log In */}
             <div className="flex flex-col justify-center h-full w-full">
-              <SignUpForm />
+              {currentStep == "credentials" ? (
+                <SignUpForm
+                  currentStep={currentStep}
+                  setCurrentStep={setCurrentStep}
+                />
+              ) : (
+                <OTPForm />
+              )}
             </div>
           </div>
         </div>

@@ -10,7 +10,7 @@ export default function Header() {
       {/* left */}
       <div className="flex gap-3">
         <Link to="/">
-          <img src="/pish-white.svg" width="60" alt="PhishingHook Logo" />
+          <img src="/brand/pish-white.svg" width="60" alt="PhishingHook Logo" />
         </Link>
         <Badge variant="outline" className="self-end">
           Alpha
