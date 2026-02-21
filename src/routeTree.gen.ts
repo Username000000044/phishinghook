@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as GamesUrlRouteImport } from './routes/games/url'
@@ -16,10 +17,14 @@ import { Route as GamesEmailRouteImport } from './routes/games/email'
 import { Route as MarketingResourcesRouteImport } from './routes/_marketing/resources'
 import { Route as MarketingProductsRouteImport } from './routes/_marketing/products'
 import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
-import { Route as AuthSignupIndexRouteImport } from './routes/auth/signup/index'
-import { Route as AuthLoginIndexRouteImport } from './routes/auth/login/index'
+import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
+import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -56,14 +61,14 @@ const MarketingPricingRoute = MarketingPricingRouteImport.update({
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignupIndexRoute = AuthSignupIndexRouteImport.update({
-  id: '/auth/signup/',
-  path: '/auth/signup/',
-  getParentRoute: () => rootRouteImport,
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
-  id: '/auth/login/',
-  path: '/auth/login/',
-  getParentRoute: () => rootRouteImport,
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => AuthRouteRoute,
 } as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
@@ -80,8 +85,8 @@ export interface FileRoutesByFullPath {
   '/games/url': typeof GamesUrlRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/login/': typeof AuthLoginIndexRoute
-  '/auth/signup/': typeof AuthSignupIndexRoute
+  '/login/': typeof AuthLoginIndexRoute
+  '/signup/': typeof AuthSignupIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,12 +97,13 @@ export interface FileRoutesByTo {
   '/games/url': typeof GamesUrlRoute
   '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/login': typeof AuthLoginIndexRoute
-  '/auth/signup': typeof AuthSignupIndexRoute
+  '/login': typeof AuthLoginIndexRoute
+  '/signup': typeof AuthSignupIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
   '/_marketing/pricing': typeof MarketingPricingRoute
   '/_marketing/products': typeof MarketingProductsRoute
   '/_marketing/resources': typeof MarketingResourcesRoute
@@ -105,8 +111,8 @@ export interface FileRoutesById {
   '/games/url': typeof GamesUrlRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/auth/login/': typeof AuthLoginIndexRoute
-  '/auth/signup/': typeof AuthSignupIndexRoute
+  '/_auth/login/': typeof AuthLoginIndexRoute
+  '/_auth/signup/': typeof AuthSignupIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -119,8 +125,8 @@ export interface FileRouteTypes {
     | '/games/url'
     | '/dashboard/'
     | '/api/auth/$'
-    | '/auth/login/'
-    | '/auth/signup/'
+    | '/login/'
+    | '/signup/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -131,11 +137,12 @@ export interface FileRouteTypes {
     | '/games/url'
     | '/dashboard'
     | '/api/auth/$'
-    | '/auth/login'
-    | '/auth/signup'
+    | '/login'
+    | '/signup'
   id:
     | '__root__'
     | '/'
+    | '/_auth'
     | '/_marketing/pricing'
     | '/_marketing/products'
     | '/_marketing/resources'
@@ -143,12 +150,13 @@ export interface FileRouteTypes {
     | '/games/url'
     | '/dashboard/'
     | '/api/auth/$'
-    | '/auth/login/'
-    | '/auth/signup/'
+    | '/_auth/login/'
+    | '/_auth/signup/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
   MarketingPricingRoute: typeof MarketingPricingRoute
   MarketingProductsRoute: typeof MarketingProductsRoute
   MarketingResourcesRoute: typeof MarketingResourcesRoute
@@ -156,12 +164,17 @@ export interface RootRouteChildren {
   GamesUrlRoute: typeof GamesUrlRoute
   DashboardIndexRoute: typeof DashboardIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
-  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
-  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -211,19 +224,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingPricingRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/auth/signup/': {
-      id: '/auth/signup/'
-      path: '/auth/signup'
-      fullPath: '/auth/signup/'
+    '/_auth/signup/': {
+      id: '/_auth/signup/'
+      path: '/signup'
+      fullPath: '/signup/'
       preLoaderRoute: typeof AuthSignupIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
-    '/auth/login/': {
-      id: '/auth/login/'
-      path: '/auth/login'
-      fullPath: '/auth/login/'
+    '/_auth/login/': {
+      id: '/_auth/login/'
+      path: '/login'
+      fullPath: '/login/'
       preLoaderRoute: typeof AuthLoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthRouteRoute
     }
     '/api/auth/$': {
       id: '/api/auth/$'
@@ -235,8 +248,23 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthSignupIndexRoute: AuthSignupIndexRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
   MarketingPricingRoute: MarketingPricingRoute,
   MarketingProductsRoute: MarketingProductsRoute,
   MarketingResourcesRoute: MarketingResourcesRoute,
@@ -244,8 +272,6 @@ const rootRouteChildren: RootRouteChildren = {
   GamesUrlRoute: GamesUrlRoute,
   DashboardIndexRoute: DashboardIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
-  AuthLoginIndexRoute: AuthLoginIndexRoute,
-  AuthSignupIndexRoute: AuthSignupIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

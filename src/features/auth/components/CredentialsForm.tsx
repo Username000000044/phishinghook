@@ -10,19 +10,17 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
 import { GoogleOneTap } from "./GoogleOneTap";
-import { AuthField } from "./AuthField";
-import { signUpSchema } from "../../schemas/auth.schema";
-import { isEmailTaken, sendOTP, signUp } from "../../server/actions";
+import { AuthField } from "./ui/AuthField";
 import { LoadingSwap } from "@/components/ui/loading-swap";
-import { Dispatch, SetStateAction } from "react";
-import { StepType } from "../SignUpPage";
+import { signUpSchema } from "../schemas/auth.schema";
+import { isEmailTaken } from "../server/helpers";
+import { signUp } from "../client/helpers";
 
-type ChildProps = {
-  setCurrentStep: Dispatch<SetStateAction<StepType>>;
-  currentStep: string;
-};
+interface FormProps {
+  onSuccess: (email: string) => void;
+}
 
-export function SignUpForm({ setCurrentStep, currentStep }: ChildProps) {
+export function CredientialsForm({ onSuccess }: FormProps) {
   const form = useForm({
     defaultValues: {
       username: "",
@@ -46,16 +44,10 @@ export function SignUpForm({ setCurrentStep, currentStep }: ChildProps) {
     },
     onSubmit: async ({ value }) => {
       try {
-        // 1. Enter User into DB
+        // Enter user into DB
         await signUp(value);
-
-        // 2. Verify User Email Using OTP
-        const otp = await sendOTP({ data: value });
-        if (otp?.success) setCurrentStep("otp"); // If OTP sent successfully, change stage to OTP
-
-        // 3.
-        //
-        //
+        // On success, pass email prop to container for OTP.
+        onSuccess(value.email);
       } catch (error) {
         // Better Auth errors should be handled within the each async function ^.
         if (error instanceof Error) {

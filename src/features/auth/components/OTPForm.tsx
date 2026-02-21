@@ -16,7 +16,7 @@ import {
 import { useForm } from "@tanstack/react-form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 
-export function OTPForm() {
+export function OTPForm({ email }: { email: string }) {
   const form = useForm({
     defaultValues: {
       otp: "",
@@ -35,7 +35,7 @@ export function OTPForm() {
         <CardTitle className="text-3xl">OTP Verification</CardTitle>
         <CardDescription className="text-muted-foreground">
           To verify your account, enter OTP code sent to:
-          <span className="block">[df****@gmail.com]</span>
+          <span className="block">[{email}]</span>
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">

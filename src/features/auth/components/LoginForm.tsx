@@ -9,10 +9,10 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Link } from "@tanstack/react-router";
+import { AuthField } from "./ui/AuthField";
 import { Button } from "@/components/ui/button";
 import { GoogleOneTap } from "./GoogleOneTap";
-import { loginSchema } from "../../schemas/auth.schema";
-import { AuthField } from "./AuthField";
+import { loginSchema } from "../schemas/auth.schema";
 
 export function LoginForm() {
   const form = useForm({

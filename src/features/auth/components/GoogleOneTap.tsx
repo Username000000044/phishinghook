@@ -1,6 +1,6 @@
+import { authClient } from "@/features/auth/client/auth-client";
 import { redirect } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { authClient } from "../../client/auth-client";
 
 export function GoogleOneTap() {
   const buttonRef = useRef<HTMLDivElement>(null);

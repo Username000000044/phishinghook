@@ -1,4 +1,6 @@
-export { LoginPage } from './ui/LoginPage'
-export { SignUpPage } from './ui/SignUpPage'
+export { LoginForm } from './components/LoginForm'
+export { SignUpContainer } from './components/SignUpContainer'
+export { AuthLayout } from './components/AuthLayout'
+
 
 
