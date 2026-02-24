@@ -34,6 +34,7 @@ export const auth = betterAuth({
                     // Send the OTP for password reset
                 } 
             }, 
+            sendVerificationOnSignUp: true
         }),
     oneTap(),
     tanstackStartCookies(),

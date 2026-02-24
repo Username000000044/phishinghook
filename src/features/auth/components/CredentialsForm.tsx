@@ -13,8 +13,9 @@ import { GoogleOneTap } from "./GoogleOneTap";
 import { AuthField } from "./ui/AuthField";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { signUpSchema } from "../schemas/auth.schema";
-import { isEmailTaken } from "../server/helpers";
-import { signUp } from "../client/helpers";
+import { toast } from "sonner";
+import { authClient } from "../client/auth-client";
+import { maskEmail } from "../server/helpers";
 
 interface FormProps {
   onSuccess: (email: string) => void;
@@ -29,33 +30,34 @@ export function CredientialsForm({ onSuccess }: FormProps) {
     },
     validators: {
       onSubmit: signUpSchema,
-      onSubmitAsync: async ({ value }) => {
-        const email = await isEmailTaken({ data: value.email });
-
-        if (email.exists)
-          return {
-            fields: {
-              email: "This email is already in use",
-            },
-          };
-
-        return undefined;
-      },
     },
-    onSubmit: async ({ value }) => {
-      try {
-        // Enter user into DB
-        await signUp(value);
-        // On success, pass email prop to container for OTP.
-        onSuccess(value.email);
-      } catch (error) {
-        // Better Auth errors should be handled within the each async function ^.
-        if (error instanceof Error) {
-          console.error(error.message);
-        } else {
-          console.error(`An unknown error occured:`, error);
-        }
-      }
+    onSubmit: async ({ value: { username, email, password } }) => {
+      await authClient.signUp.email({
+        name: username, // required
+        email, // required
+        password, // required
+        // image: defaultProfile,
+        fetchOptions: {
+          async onSuccess(context) {
+            toast.success("OTP verification code sent to email!");
+
+            // Mask email on server
+            const maskedEmail = await maskEmail({ data: email });
+            onSuccess(maskedEmail);
+          },
+          onError(context) {
+            return form.setFieldMeta("email", (prev) => ({
+              ...prev,
+              errorMap: {
+                ...prev.errorMap,
+                onSubmit: context.error.message,
+              },
+            }));
+          },
+          onRequest(context) {},
+          onResponse(context) {},
+        },
+      });
     },
   });
 

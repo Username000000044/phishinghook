@@ -15,19 +15,38 @@ import {
 } from "@/components/ui/input-otp";
 import { useForm } from "@tanstack/react-form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useNavigate } from "@tanstack/react-router";
+import { UserOTP, verifyUserOTP } from "../client/helpers";
 
-export function OTPForm({ email }: { email: string }) {
+export function OTPForm({ email }: Pick<UserOTP, "email">) {
+  const navigate = useNavigate();
+
   const form = useForm({
     defaultValues: {
       otp: "",
     },
     validators: {
-      onChangeAsync: async ({ value }) => {},
+      // onChangeAsync: async ({ value: { otp } }) => {
+      //   if (otp.length === 6) {
+      //     const { error } = await verifyUserOTP({ email, otp });
+      //     if (error)
+      //       return {
+      //         fields: {
+      //           email: "OTP is not correct, please try again.",
+      //         },
+      //       };
+      //     return undefined;
+      //   }
+      // },
     },
-    onSubmit: async ({ value }) => {
-      // await router.navigate({ to: "/dashboard" });
+    onSubmit: async () => {
+      await navigate({ to: "/dashboard" });
     },
   });
+
+  // const handleMask = async (email: string) => {
+  //   return await maskEmail({ data: email });
+  // };
 
   return (
     <Card className="bg-transparent border-none p-0">
@@ -35,7 +54,7 @@ export function OTPForm({ email }: { email: string }) {
         <CardTitle className="text-3xl">OTP Verification</CardTitle>
         <CardDescription className="text-muted-foreground">
           To verify your account, enter OTP code sent to:
-          <span className="block">[{email}]</span>
+          <span className="block">[{email || "Unknown Email"}]</span>
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
@@ -82,8 +101,7 @@ export function OTPForm({ email }: { email: string }) {
                         <InputOTPSlot index={5} />
                       </InputOTPGroup>
                     </InputOTP>
-                    {isInvalid && <FieldError>{field.state.value}</FieldError>}
-                    {/* field.state.meta.errors */}
+                    {isInvalid && <FieldError>{errors}</FieldError>}
                   </div>
                 </>
               );

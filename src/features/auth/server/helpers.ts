@@ -1,29 +1,19 @@
-import { db } from "@/db";
 import { createServerFn } from "@tanstack/react-start";
-import { eq } from "drizzle-orm";
-import { user } from "../schemas/auth.sql";
-import { SignUpInput } from "../schemas/auth.schema";
-import { auth } from "./auth";
 
-export const isEmailTaken = createServerFn({ method: "GET" })
+export const maskEmail = createServerFn() //AI
   .inputValidator((email: string) => email)
   .handler(async ({ data: email }) => {
-    
-    const userQuery = await db.query.user.findFirst({
-      where: eq(user.email, email),
-    });
-    return { exists: !!userQuery }; // true if user exists
-  });
+    if (!email || !email.includes("@")) return email;
 
-export const sendOTP = createServerFn({ method: "POST" })
-  .inputValidator((value: SignUpInput) => value)
-  .handler(async ({ data: value }) => {
-    const data = await auth.api.sendVerificationOTP({
-      body: {
-        email: value.email, // required
-        type: "email-verification", // required
-      },
-    });
+    const [localPart, domain] = email.split("@");
 
-    if (data) return { success: true };
+    // Handle very short usernames
+    if (localPart.length <= 2) {
+      return `****@${domain}`;
+    }
+
+    const firstChar = localPart[0];
+    const lastChar = localPart[localPart.length - 1];
+
+    return `${firstChar}****${lastChar}@${domain}`;
   });

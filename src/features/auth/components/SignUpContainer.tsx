@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CredientialsForm } from "./CredentialsForm";
 import { OTPForm } from "./OTPForm";
+import { authClient } from "../client/auth-client";
 
 type SignUpStep = "credentials" | "otp";
 
@@ -14,9 +15,12 @@ export function SignUpContainer() {
     setStep("otp");
   };
 
+  const { data: session } = authClient.useSession();
+  const verified = session?.user.emailVerified;
+
   return (
     <div>
-      {step === "credentials" ? (
+      {step === "credentials" && !verified ? (
         <CredientialsForm onSuccess={handleSignUpSuccess} />
       ) : (
         <OTPForm email={userEmail} />

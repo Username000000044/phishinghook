@@ -1,21 +1,19 @@
-import { toast } from "sonner";
-import { SignUpInput } from "../schemas/auth.schema";
 import { authClient } from "./auth-client";
-import defaultProfile from "/brand/default-profile.png";
+import { toast } from "sonner";
 
+export type UserOTP = {
+  email: string;
+  otp: string;
+};
 
-export const signUp = async ({ email, username, password }: SignUpInput) => {
-  await authClient.signUp.email({
+export const verifyUserOTP = async ({ email, otp }: UserOTP) => {
+  return await authClient.emailOtp.checkVerificationOtp({
     email,
-    password,
-    name: username,
-    image: defaultProfile, // Default user profile image
+    otp,
+    type: "email-verification",
     fetchOptions: {
-      onSuccess(context) {
-        toast.success("Check email to verfy your account!");
-      },
-      onError(context) {
-        toast.error(context.error.message);
+      onError(ctx) {
+        toast.error(ctx.error.message);
       },
     },
   });
