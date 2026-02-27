@@ -9,19 +9,18 @@ import {
 } from "@/components/ui/card";
 import { Field, FieldGroup } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
-import { GoogleOneTap } from "./GoogleOneTap";
 import { AuthField } from "./ui/AuthField";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { signUpSchema } from "../schemas/auth.schema";
-import { toast } from "sonner";
 import { authClient } from "../client/auth-client";
 import { maskEmail } from "../server/helpers";
+import { toast } from "sonner";
 
 interface FormProps {
-  onSuccess: (email: string) => void;
+  changeStep: (email: string) => void;
 }
 
-export function CredientialsForm({ onSuccess }: FormProps) {
+export function CredientialsForm({ changeStep }: FormProps) {
   const form = useForm({
     defaultValues: {
       username: "",
@@ -33,29 +32,36 @@ export function CredientialsForm({ onSuccess }: FormProps) {
     },
     onSubmit: async ({ value: { username, email, password } }) => {
       await authClient.signUp.email({
-        name: username, // required
-        email, // required
-        password, // required
-        // image: defaultProfile,
+        name: username,
+        email,
+        password,
         fetchOptions: {
           async onSuccess(context) {
-            toast.success("OTP verification code sent to email!");
-
-            // Mask email on server
+            // Send OTP
+            toast.success("Check your email to verify your account!");
+            // Mask Email and change UI to OTP comopnet
             const maskedEmail = await maskEmail({ data: email });
-            onSuccess(maskedEmail);
+            changeStep(maskedEmail);
           },
           onError(context) {
-            return form.setFieldMeta("email", (prev) => ({
-              ...prev,
-              errorMap: {
-                ...prev.errorMap,
-                onSubmit: context.error.message,
-              },
-            }));
+            const error = context.error;
+            if (error.code === "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL") {
+              return form.setFieldMeta("email", (prev) => ({
+                ...prev,
+                errorMap: {
+                  ...prev.errorMap,
+                  onSubmit: error.message,
+                },
+              }));
+            } else {
+              toast.error(
+                "Verification could not be sent. Try to send it again in a few seconds.",
+              );
+              throw new Error(`Unexpected: ${error}`);
+            }
           },
-          onRequest(context) {},
-          onResponse(context) {},
+          // onRequest(context) {},
+          // onResponse(context) {},
         },
       });
     },
@@ -111,7 +117,7 @@ export function CredientialsForm({ onSuccess }: FormProps) {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="flex flex-col text-center w-full p-0 space-y-6">
+      <CardFooter className="flex flex-col text-center w-full p-0">
         <form.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (
@@ -127,14 +133,6 @@ export function CredientialsForm({ onSuccess }: FormProps) {
             </Field>
           )}
         ></form.Subscribe>
-
-        <div className="flex justify-center items-center gap-5 w-full">
-          <hr className="bg-muted w-full h-[1px]" />
-          <p className="text-xs text-muted">OR</p>
-          <hr className="bg-muted w-full h-[1px]" />
-        </div>
-
-        <GoogleOneTap />
       </CardFooter>
     </Card>
   );

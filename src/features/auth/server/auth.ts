@@ -3,7 +3,10 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@db/index";
 import * as schema from "@/features/auth/schemas/auth.sql";
-import { emailOTP, oneTap, twoFactor } from "better-auth/plugins";
+import { emailOTP, oneTap } from "better-auth/plugins";
+import { sendEmail } from "@/lib/mail";
+import { OTPEmailTemplate } from "../components/OTPEmailTemplate";
+import { toast } from "sonner";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -20,22 +23,24 @@ export const auth = betterAuth({
   socialProviders: {
     google: {
       clientId: process.env.VITE_GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIfENT_SECRET as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
   plugins: [
-    emailOTP({ 
-            async sendVerificationOTP({ email, otp, type }) { 
-                if (type === "sign-in") { 
-                    // Send the OTP for sign in
-                } else if (type === "email-verification") { 
-                    console.log("Ready to send email!")
-                } else { 
-                    // Send the OTP for password reset
-                } 
-            }, 
-            sendVerificationOnSignUp: true
-        }),
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "email-verification") {
+          await sendEmail({
+            data: {
+              to: [email],
+              subject: "Account verification OTP",
+              react: OTPEmailTemplate({ email, otp }),
+            },
+          });
+        }
+      },
+      sendVerificationOnSignUp: true,
+    }),
     oneTap(),
     tanstackStartCookies(),
   ],

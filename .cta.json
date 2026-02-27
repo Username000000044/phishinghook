@@ -18,7 +18,6 @@
     "start",
     "drizzle",
     "shadcn",
-    "better-auth",
-    "t3env"
+    "better-auth"
   ]
 }

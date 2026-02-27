@@ -1,6 +1,6 @@
+
 import { authClient } from "./auth-client";
 import { toast } from "sonner";
-
 export type UserOTP = {
   email: string;
   otp: string;

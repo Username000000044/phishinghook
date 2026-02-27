@@ -21,6 +21,8 @@ export const Route = createRootRoute({
       },
       {
         title: "Phishing Hook",
+        content:
+          "An innovative solution to security based phishing training to level up your online safety.",
       },
     ],
     links: [

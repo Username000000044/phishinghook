@@ -71,14 +71,6 @@ export function LoginForm() {
             Login
           </Button>
         </Field>
-
-        <div className="flex justify-center items-center gap-5 w-full">
-          <hr className="bg-muted w-full h-[1px]" />
-          <p className="text-xs text-muted">OR</p>
-          <hr className="bg-muted w-full h-[1px]" />
-        </div>
-
-        <GoogleOneTap />
       </CardFooter>
     </Card>
   );
