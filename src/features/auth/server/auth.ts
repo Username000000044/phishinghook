@@ -29,6 +29,7 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
+        
         if (type === "email-verification") {
           await sendEmail({
             data: {

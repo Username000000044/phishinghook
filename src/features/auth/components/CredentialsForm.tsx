@@ -15,9 +15,16 @@ import { signUpSchema } from "../schemas/auth.schema";
 import { authClient } from "../client/auth-client";
 import { maskEmail } from "../server/helpers";
 import { toast } from "sonner";
+import { GoogleOneTap } from "./GoogleOneTap";
 
 interface FormProps {
-  changeStep: (email: string) => void;
+  changeStep: ({
+    email,
+    maskedEmail,
+  }: {
+    email: string;
+    maskedEmail: string;
+  }) => void;
 }
 
 export function CredientialsForm({ changeStep }: FormProps) {
@@ -41,7 +48,8 @@ export function CredientialsForm({ changeStep }: FormProps) {
             toast.success("Check your email to verify your account!");
             // Mask Email and change UI to OTP comopnet
             const maskedEmail = await maskEmail({ data: email });
-            changeStep(maskedEmail);
+
+            changeStep({ email, maskedEmail });
           },
           onError(context) {
             const error = context.error;
@@ -78,7 +86,7 @@ export function CredientialsForm({ changeStep }: FormProps) {
       </CardHeader>
       <CardContent className="p-0">
         <form
-          id="sign-in-form"
+          id="sign-up-form"
           onSubmit={(e) => {
             e.preventDefault();
             form.handleSubmit();
@@ -124,7 +132,7 @@ export function CredientialsForm({ changeStep }: FormProps) {
             <Field>
               <Button
                 type="submit"
-                form="sign-in-form"
+                form="sign-up-form"
                 className="cursor-pointer"
                 disabled={isSubmitting}
               >
@@ -133,6 +141,17 @@ export function CredientialsForm({ changeStep }: FormProps) {
             </Field>
           )}
         ></form.Subscribe>
+
+        {/* Oauth */}
+        <section className="flex flex-col items-center space-y-4 mt-4 w-full">
+          <div className="flex justify-center items-center gap-5 w-full">
+            <hr className="bg-muted w-full h-[1px]" />
+            <p className="text-xs text-muted">OR</p>
+            <hr className="bg-muted w-full h-[1px]" />
+          </div>
+
+          <GoogleOneTap />
+        </section>
       </CardFooter>
     </Card>
   );

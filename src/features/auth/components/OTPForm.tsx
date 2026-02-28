@@ -16,37 +16,61 @@ import {
 import { useForm } from "@tanstack/react-form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { useNavigate } from "@tanstack/react-router";
-import { UserOTP, verifyUserOTP } from "../client/helpers";
+import { authClient } from "../client/auth-client";
+import { toast } from "sonner";
 
-export function OTPForm({ email }: Pick<UserOTP, "email">) {
+export function OTPForm({
+  email,
+  maskedEmail,
+}: {
+  email: string;
+  maskedEmail: string;
+}) {
   const navigate = useNavigate();
+  const OTP_MAX = 6;
 
   const form = useForm({
     defaultValues: {
       otp: "",
     },
     validators: {
-      // onChangeAsync: async ({ value: { otp } }) => {
-      //   if (otp.length === 6) {
-      //     const { error } = await verifyUserOTP({ email, otp });
-      //     if (error)
-      //       return {
-      //         fields: {
-      //           email: "OTP is not correct, please try again.",
-      //         },
-      //       };
-      //     return undefined;
-      //   }
-      // },
+      onChange: ({ value: { otp } }) => {
+        if (otp.length !== OTP_MAX) return;
+
+        form.handleSubmit();
+      },
     },
-    onSubmit: async () => {
-      await navigate({ to: "/dashboard" });
+    onSubmit: async ({ value: { otp } }) => {
+      await authClient.emailOtp.verifyEmail({
+        email, // required
+        otp, // required
+        fetchOptions: {
+          async onSuccess() {
+            await navigate({ to: "/dashboard" });
+          },
+          onError(context) {
+            const error = context.error;
+            if (error.code === "INVALID_OTP") {
+              form.setFieldMeta("otp", (prev) => ({
+                ...prev,
+                errorMap: {
+                  ...prev.errorMap,
+                  onSubmit: error.message,
+                },
+              }));
+            } else if (error.code === "TOO_MANY_ATTEMTPS") {
+              toast.error("Too many attempts. Try again in a few seconds.");
+            } else {
+              toast.error(
+                "OTP could not be verified. Try again in a few seconds.",
+              );
+              throw new Error(`Unexpected: ${error}`);
+            }
+          },
+        },
+      });
     },
   });
-
-  // const handleMask = async (email: string) => {
-  //   return await maskEmail({ data: email });
-  // };
 
   return (
     <Card className="bg-transparent border-none p-0">
@@ -54,7 +78,7 @@ export function OTPForm({ email }: Pick<UserOTP, "email">) {
         <CardTitle className="text-3xl">OTP Verification</CardTitle>
         <CardDescription className="text-muted-foreground">
           To verify your account, enter OTP code sent to:
-          <span className="block">[{email || "Unknown Email"}]</span>
+          <span className="block">[{maskedEmail || "Unknown Email"}]</span>
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
@@ -79,7 +103,7 @@ export function OTPForm({ email }: Pick<UserOTP, "email">) {
                     data-invalid={isInvalid}
                   >
                     <InputOTP
-                      maxLength={6}
+                      maxLength={OTP_MAX}
                       pattern={REGEXP_ONLY_DIGITS}
                       // Form details
                       id={field.name}

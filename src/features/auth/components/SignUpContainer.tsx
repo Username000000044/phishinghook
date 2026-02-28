@@ -1,16 +1,23 @@
 import { useState } from "react";
 import { CredientialsForm } from "./CredentialsForm";
 import { OTPForm } from "./OTPForm";
+import { maskEmail } from "../server/helpers";
 
 type SignUpStep = "credentials" | "otp";
 
 export function SignUpContainer() {
   const [step, setStep] = useState<SignUpStep>("credentials");
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState({ email: "", maskedEmail: "" });
 
-  const handleChangeStep = (email: string) => {
+  const handleChangeStep = ({
+    email,
+    maskedEmail,
+  }: {
+    email: string;
+    maskedEmail: string;
+  }) => {
     // Email is passed up from CredentialsForm
-    setUserEmail(email);
+    setUserEmail({ email, maskedEmail });
     setStep("otp");
   };
 
@@ -19,7 +26,7 @@ export function SignUpContainer() {
       {step === "credentials" ? (
         <CredientialsForm changeStep={handleChangeStep} />
       ) : (
-        <OTPForm email={userEmail} />
+        <OTPForm email={userEmail.email} maskedEmail={userEmail.maskedEmail} />
       )}
     </div>
   );

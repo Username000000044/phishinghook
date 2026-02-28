@@ -26,17 +26,6 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => {
             {/* Log In */}
             <div className="flex flex-col justify-center h-full w-full">
               {children}
-
-              {/* Oauth */}
-              <section className="flex flex-col items-center space-y-4 mt-4 ">
-                <div className="flex justify-center items-center gap-5 w-full">
-                  <hr className="bg-muted w-full h-[1px]" />
-                  <p className="text-xs text-muted">OR</p>
-                  <hr className="bg-muted w-full h-[1px]" />
-                </div>
-
-                <GoogleOneTap />
-              </section>
             </div>
           </div>
         </div>

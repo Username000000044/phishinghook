@@ -13,7 +13,7 @@ import { useState } from "react";
 interface AuthFieldProps {
   field: AnyFieldApi;
   placeholder?: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "checkbox";
   autoComplete: string;
 }
 
