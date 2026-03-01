@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { APIError, betterAuth } from "better-auth";
 import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@db/index";
@@ -22,7 +22,7 @@ export const auth = betterAuth({
     },
   },
   plugins: [
-    organization(),
+    oneTap(),
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
         if (type === "email-verification") {
@@ -37,7 +37,41 @@ export const auth = betterAuth({
       },
       sendVerificationOnSignUp: true,
     }),
-    oneTap(),
+    organization(),
     tanstackStartCookies(),
   ],
+  // hooks: {
+  //   after: createAuthMiddleware(async (ctx) => {
+  //     if (ctx.path.startsWith("/sign-up")) {
+  //       const newSession = ctx.context.newSession;
+  //       if (newSession) {
+  //         try {
+  //           await auth.api.createOrganization({
+  //             body: {
+  //               name: "Personal", // required
+  //               slug: `${newSession.user.id}-personal`, // required
+  //               // logo: "https://example.com/logo.png",
+  //               // metadata,
+  //               userId: newSession.user.id,
+  //               keepCurrentActiveOrganization: false,
+  //             },
+  //           });
+  //         } catch (error) {
+  //           if (error instanceof APIError) {
+  //             throw new APIError(error.status, {
+  //               message: error.message,
+  //             });
+  //           }
+
+  //           throw new Error(`Unexpected: ${error}`);
+  //         }
+
+  //         // sendMessage({
+  //         //     type: "user-register",
+  //         //     name: newSession.user.name,
+  //         // })
+  //       }
+  //     }
+  //   }),
+  // },
 });

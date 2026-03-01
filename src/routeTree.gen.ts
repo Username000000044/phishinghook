@@ -11,12 +11,12 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as GamesUrlRouteImport } from './routes/games/url'
 import { Route as GamesEmailRouteImport } from './routes/games/email'
 import { Route as MarketingResourcesRouteImport } from './routes/_marketing/resources'
 import { Route as MarketingProductsRouteImport } from './routes/_marketing/products'
 import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
+import { Route as AuthenticatedDashboardIndexRouteImport } from './routes/_authenticated/dashboard/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
@@ -28,11 +28,6 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GamesUrlRoute = GamesUrlRouteImport.update({
@@ -60,6 +55,12 @@ const MarketingPricingRoute = MarketingPricingRouteImport.update({
   path: '/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedDashboardIndexRoute =
+  AuthenticatedDashboardIndexRouteImport.update({
+    id: '/dashboard/',
+    path: '/dashboard/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthSignupIndexRoute = AuthSignupIndexRouteImport.update({
   id: '/signup/',
   path: '/signup/',
@@ -83,10 +84,10 @@ export interface FileRoutesByFullPath {
   '/resources': typeof MarketingResourcesRoute
   '/games/email': typeof GamesEmailRoute
   '/games/url': typeof GamesUrlRoute
-  '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login/': typeof AuthLoginIndexRoute
   '/signup/': typeof AuthSignupIndexRoute
+  '/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -95,10 +96,10 @@ export interface FileRoutesByTo {
   '/resources': typeof MarketingResourcesRoute
   '/games/email': typeof GamesEmailRoute
   '/games/url': typeof GamesUrlRoute
-  '/dashboard': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login': typeof AuthLoginIndexRoute
   '/signup': typeof AuthSignupIndexRoute
+  '/dashboard': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -109,10 +110,10 @@ export interface FileRoutesById {
   '/_marketing/resources': typeof MarketingResourcesRoute
   '/games/email': typeof GamesEmailRoute
   '/games/url': typeof GamesUrlRoute
-  '/dashboard/': typeof DashboardIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/signup/': typeof AuthSignupIndexRoute
+  '/_authenticated/dashboard/': typeof AuthenticatedDashboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,10 +124,10 @@ export interface FileRouteTypes {
     | '/resources'
     | '/games/email'
     | '/games/url'
-    | '/dashboard/'
     | '/api/auth/$'
     | '/login/'
     | '/signup/'
+    | '/dashboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -135,10 +136,10 @@ export interface FileRouteTypes {
     | '/resources'
     | '/games/email'
     | '/games/url'
-    | '/dashboard'
     | '/api/auth/$'
     | '/login'
     | '/signup'
+    | '/dashboard'
   id:
     | '__root__'
     | '/'
@@ -148,10 +149,10 @@ export interface FileRouteTypes {
     | '/_marketing/resources'
     | '/games/email'
     | '/games/url'
-    | '/dashboard/'
     | '/api/auth/$'
     | '/_auth/login/'
     | '/_auth/signup/'
+    | '/_authenticated/dashboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -162,7 +163,6 @@ export interface RootRouteChildren {
   MarketingResourcesRoute: typeof MarketingResourcesRoute
   GamesEmailRoute: typeof GamesEmailRoute
   GamesUrlRoute: typeof GamesUrlRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -180,13 +180,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/games/url': {
@@ -223,6 +216,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/pricing'
       preLoaderRoute: typeof MarketingPricingRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/dashboard/': {
+      id: '/_authenticated/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof AuthenticatedDashboardIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_auth/signup/': {
       id: '/_auth/signup/'
@@ -270,7 +270,6 @@ const rootRouteChildren: RootRouteChildren = {
   MarketingResourcesRoute: MarketingResourcesRoute,
   GamesEmailRoute: GamesEmailRoute,
   GamesUrlRoute: GamesUrlRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
