@@ -13,7 +13,7 @@ import { AuthField } from "./ui/AuthField";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { signUpSchema } from "../schemas/auth.schema";
 import { authClient } from "../client/auth-client";
-import { maskEmail } from "../server/helpers";
+import { maskEmail } from "../server/utils";
 import { toast } from "sonner";
 import { GoogleOneTap } from "./GoogleOneTap";
 

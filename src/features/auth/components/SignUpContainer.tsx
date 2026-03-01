@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { CredientialsForm } from "./CredentialsForm";
 import { OTPForm } from "./OTPForm";
-import { maskEmail } from "../server/helpers";
 
 type SignUpStep = "credentials" | "otp";
 

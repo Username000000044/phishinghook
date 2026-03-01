@@ -13,15 +13,13 @@ import { AuthField } from "./ui/AuthField";
 import { LoadingSwap } from "@/components/ui/loading-swap";
 import { loginSchema } from "../schemas/auth.schema";
 import { authClient } from "../client/auth-client";
-import { maskEmail } from "../server/helpers";
 import { toast } from "sonner";
 import { GoogleOneTap } from "./GoogleOneTap";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
-export function LoginForm() {
+export async function LoginForm() {
   const navigate = useNavigate();
 
   const form = useForm({
@@ -47,6 +45,8 @@ export function LoginForm() {
           onError(context) {
             const error = context.error;
             if (error.code === "INVALID_EMAIL_OR_PASSWORD") {
+              // EMAIL OR PASSWORD ERRORS POOR PRACTICE
+
               form.setFieldMeta("email", (prev) => ({
                 ...prev,
                 errorMap: {
@@ -55,7 +55,7 @@ export function LoginForm() {
                 },
               }));
 
-              form.setFieldMeta("password", (prev) => ({
+              return form.setFieldMeta("password", (prev) => ({
                 ...prev,
                 errorMap: {
                   ...prev.errorMap,

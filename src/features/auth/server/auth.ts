@@ -3,20 +3,15 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@db/index";
 import * as schema from "@/features/auth/schemas/auth.sql";
-import { emailOTP, oneTap } from "better-auth/plugins";
+import { emailOTP, oneTap, organization } from "better-auth/plugins";
 import { sendEmail } from "@/lib/mail";
 import { OTPEmailTemplate } from "../components/OTPEmailTemplate";
-import { toast } from "sonner";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: schema,
   }),
-  advanced: {
-    cookiePrefix: "ph",
-    useSecureCookies: true,
-  },
   emailAndPassword: {
     enabled: true,
   },
@@ -27,9 +22,9 @@ export const auth = betterAuth({
     },
   },
   plugins: [
+    organization(),
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
-        
         if (type === "email-verification") {
           await sendEmail({
             data: {
