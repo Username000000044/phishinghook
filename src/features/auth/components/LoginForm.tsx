@@ -19,7 +19,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useNavigate } from "@tanstack/react-router";
 
-export async function LoginForm() {
+export function LoginForm() {
   const navigate = useNavigate();
 
   const form = useForm({

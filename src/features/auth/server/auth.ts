@@ -40,38 +40,4 @@ export const auth = betterAuth({
     organization(),
     tanstackStartCookies(),
   ],
-  // hooks: {
-  //   after: createAuthMiddleware(async (ctx) => {
-  //     if (ctx.path.startsWith("/sign-up")) {
-  //       const newSession = ctx.context.newSession;
-  //       if (newSession) {
-  //         try {
-  //           await auth.api.createOrganization({
-  //             body: {
-  //               name: "Personal", // required
-  //               slug: `${newSession.user.id}-personal`, // required
-  //               // logo: "https://example.com/logo.png",
-  //               // metadata,
-  //               userId: newSession.user.id,
-  //               keepCurrentActiveOrganization: false,
-  //             },
-  //           });
-  //         } catch (error) {
-  //           if (error instanceof APIError) {
-  //             throw new APIError(error.status, {
-  //               message: error.message,
-  //             });
-  //           }
-
-  //           throw new Error(`Unexpected: ${error}`);
-  //         }
-
-  //         // sendMessage({
-  //         //     type: "user-register",
-  //         //     name: newSession.user.name,
-  //         // })
-  //       }
-  //     }
-  //   }),
-  // },
 });
