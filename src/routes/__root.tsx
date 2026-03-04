@@ -6,6 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import appCss from "../styles.css?url";
+import Header from "@/components/Header";
+import { getSession } from "@/lib/auth";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +35,10 @@ export const Route = createRootRoute({
     ],
   }),
 
+  loader: async () => {
+    const session = await getSession();
+    return { session };
+  },
   shellComponent: RootDocument,
 });
 

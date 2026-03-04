@@ -1,10 +1,15 @@
-import { Link } from "@tanstack/react-router";
+import { getRouteApi, Link } from "@tanstack/react-router";
 import { Badge } from "@ui/badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@ui/hover-card";
 import { MailQuestionMark, QrCode } from "lucide-react";
 import { Button } from "@ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 
 export default function Header() {
+  const routeApi = getRouteApi("/_home");
+  const data = routeApi.useLoaderData();
+  const user = data?.user;
+
   return (
     <div className="w-full flex justify-between items-center">
       {/* left */}
@@ -78,13 +83,27 @@ export default function Header() {
       </ol>
 
       {/* right */}
-      <div className="flex gap-3">
-        <Button variant="outline" asChild>
-          <Link to="/">Get Started</Link>
-        </Button>
-        <Button asChild>
-          <Link to="/signup">Sign up</Link>
-        </Button>
+      <div className="flex gap-5">
+        {data ? (
+          <>
+            <Avatar size="lg">
+              <AvatarImage
+                src={user?.image || undefined}
+                alt="Profile Picture"
+              />
+              <AvatarFallback>{user?.name.slice(0, 2)}</AvatarFallback>
+            </Avatar>
+          </>
+        ) : (
+          <>
+            <Button variant="outline" asChild>
+              <Link to="/">Get Started</Link>
+            </Button>
+            <Button asChild>
+              <Link to="/signup">Sign up</Link>
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );

@@ -10,55 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProtectedRouteImport } from './routes/_protected'
+import { Route as HomeRouteImport } from './routes/_home'
 import { Route as AuthRouteImport } from './routes/_auth'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as GamesUrlRouteImport } from './routes/games/url'
-import { Route as GamesEmailRouteImport } from './routes/games/email'
-import { Route as MarketingResourcesRouteImport } from './routes/_marketing/resources'
-import { Route as MarketingProductsRouteImport } from './routes/_marketing/products'
-import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
+import { Route as HomeIndexRouteImport } from './routes/_home/index'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as HomeGamesUrlRouteImport } from './routes/_home/games/url'
+import { Route as HomeGamesEmailRouteImport } from './routes/_home/games/email'
+import { Route as HomeMarketingResourcesRouteImport } from './routes/_home/_marketing/resources'
+import { Route as HomeMarketingProductsRouteImport } from './routes/_home/_marketing/products'
+import { Route as HomeMarketingPricingRouteImport } from './routes/_home/_marketing/pricing'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/_home',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
+const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesUrlRoute = GamesUrlRouteImport.update({
-  id: '/games/url',
-  path: '/games/url',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GamesEmailRoute = GamesEmailRouteImport.update({
-  id: '/games/email',
-  path: '/games/email',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketingResourcesRoute = MarketingResourcesRouteImport.update({
-  id: '/_marketing/resources',
-  path: '/resources',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketingProductsRoute = MarketingProductsRouteImport.update({
-  id: '/_marketing/products',
-  path: '/products',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MarketingPricingRoute = MarketingPricingRouteImport.update({
-  id: '/_marketing/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => HomeRoute,
 } as any)
 const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
   id: '/dashboard/',
@@ -80,26 +60,51 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeGamesUrlRoute = HomeGamesUrlRouteImport.update({
+  id: '/games/url',
+  path: '/games/url',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeGamesEmailRoute = HomeGamesEmailRouteImport.update({
+  id: '/games/email',
+  path: '/games/email',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeMarketingResourcesRoute = HomeMarketingResourcesRouteImport.update({
+  id: '/_marketing/resources',
+  path: '/resources',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeMarketingProductsRoute = HomeMarketingProductsRouteImport.update({
+  id: '/_marketing/products',
+  path: '/products',
+  getParentRoute: () => HomeRoute,
+} as any)
+const HomeMarketingPricingRoute = HomeMarketingPricingRouteImport.update({
+  id: '/_marketing/pricing',
+  path: '/pricing',
+  getParentRoute: () => HomeRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/pricing': typeof MarketingPricingRoute
-  '/products': typeof MarketingProductsRoute
-  '/resources': typeof MarketingResourcesRoute
-  '/games/email': typeof GamesEmailRoute
-  '/games/url': typeof GamesUrlRoute
+  '/': typeof HomeIndexRoute
+  '/pricing': typeof HomeMarketingPricingRoute
+  '/products': typeof HomeMarketingProductsRoute
+  '/resources': typeof HomeMarketingResourcesRoute
+  '/games/email': typeof HomeGamesEmailRoute
+  '/games/url': typeof HomeGamesUrlRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login/': typeof AuthLoginIndexRoute
   '/signup/': typeof AuthSignupIndexRoute
   '/dashboard/': typeof ProtectedDashboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/pricing': typeof MarketingPricingRoute
-  '/products': typeof MarketingProductsRoute
-  '/resources': typeof MarketingResourcesRoute
-  '/games/email': typeof GamesEmailRoute
-  '/games/url': typeof GamesUrlRoute
+  '/': typeof HomeIndexRoute
+  '/pricing': typeof HomeMarketingPricingRoute
+  '/products': typeof HomeMarketingProductsRoute
+  '/resources': typeof HomeMarketingResourcesRoute
+  '/games/email': typeof HomeGamesEmailRoute
+  '/games/url': typeof HomeGamesUrlRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login': typeof AuthLoginIndexRoute
   '/signup': typeof AuthSignupIndexRoute
@@ -107,14 +112,15 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_auth': typeof AuthRouteWithChildren
+  '/_home': typeof HomeRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
-  '/_marketing/pricing': typeof MarketingPricingRoute
-  '/_marketing/products': typeof MarketingProductsRoute
-  '/_marketing/resources': typeof MarketingResourcesRoute
-  '/games/email': typeof GamesEmailRoute
-  '/games/url': typeof GamesUrlRoute
+  '/_home/': typeof HomeIndexRoute
+  '/_home/_marketing/pricing': typeof HomeMarketingPricingRoute
+  '/_home/_marketing/products': typeof HomeMarketingProductsRoute
+  '/_home/_marketing/resources': typeof HomeMarketingResourcesRoute
+  '/_home/games/email': typeof HomeGamesEmailRoute
+  '/_home/games/url': typeof HomeGamesUrlRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/signup/': typeof AuthSignupIndexRoute
@@ -147,14 +153,15 @@ export interface FileRouteTypes {
     | '/dashboard'
   id:
     | '__root__'
-    | '/'
     | '/_auth'
+    | '/_home'
     | '/_protected'
-    | '/_marketing/pricing'
-    | '/_marketing/products'
-    | '/_marketing/resources'
-    | '/games/email'
-    | '/games/url'
+    | '/_home/'
+    | '/_home/_marketing/pricing'
+    | '/_home/_marketing/products'
+    | '/_home/_marketing/resources'
+    | '/_home/games/email'
+    | '/_home/games/url'
     | '/api/auth/$'
     | '/_auth/login/'
     | '/_auth/signup/'
@@ -162,14 +169,9 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
+  HomeRoute: typeof HomeRouteWithChildren
   ProtectedRoute: typeof ProtectedRouteWithChildren
-  MarketingPricingRoute: typeof MarketingPricingRoute
-  MarketingProductsRoute: typeof MarketingProductsRoute
-  MarketingResourcesRoute: typeof MarketingResourcesRoute
-  GamesEmailRoute: typeof GamesEmailRoute
-  GamesUrlRoute: typeof GamesUrlRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -182,6 +184,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_home': {
+      id: '/_home'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth': {
       id: '/_auth'
       path: ''
@@ -189,47 +198,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
+    '/_home/': {
+      id: '/_home/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/url': {
-      id: '/games/url'
-      path: '/games/url'
-      fullPath: '/games/url'
-      preLoaderRoute: typeof GamesUrlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/games/email': {
-      id: '/games/email'
-      path: '/games/email'
-      fullPath: '/games/email'
-      preLoaderRoute: typeof GamesEmailRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_marketing/resources': {
-      id: '/_marketing/resources'
-      path: '/resources'
-      fullPath: '/resources'
-      preLoaderRoute: typeof MarketingResourcesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_marketing/products': {
-      id: '/_marketing/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof MarketingProductsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/_marketing/pricing': {
-      id: '/_marketing/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof MarketingPricingRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof HomeRoute
     }
     '/_protected/dashboard/': {
       id: '/_protected/dashboard/'
@@ -259,6 +233,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_home/games/url': {
+      id: '/_home/games/url'
+      path: '/games/url'
+      fullPath: '/games/url'
+      preLoaderRoute: typeof HomeGamesUrlRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/_home/games/email': {
+      id: '/_home/games/email'
+      path: '/games/email'
+      fullPath: '/games/email'
+      preLoaderRoute: typeof HomeGamesEmailRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/_home/_marketing/resources': {
+      id: '/_home/_marketing/resources'
+      path: '/resources'
+      fullPath: '/resources'
+      preLoaderRoute: typeof HomeMarketingResourcesRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/_home/_marketing/products': {
+      id: '/_home/_marketing/products'
+      path: '/products'
+      fullPath: '/products'
+      preLoaderRoute: typeof HomeMarketingProductsRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/_home/_marketing/pricing': {
+      id: '/_home/_marketing/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof HomeMarketingPricingRouteImport
+      parentRoute: typeof HomeRoute
+    }
   }
 }
 
@@ -274,6 +283,26 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface HomeRouteChildren {
+  HomeIndexRoute: typeof HomeIndexRoute
+  HomeMarketingPricingRoute: typeof HomeMarketingPricingRoute
+  HomeMarketingProductsRoute: typeof HomeMarketingProductsRoute
+  HomeMarketingResourcesRoute: typeof HomeMarketingResourcesRoute
+  HomeGamesEmailRoute: typeof HomeGamesEmailRoute
+  HomeGamesUrlRoute: typeof HomeGamesUrlRoute
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
+  HomeIndexRoute: HomeIndexRoute,
+  HomeMarketingPricingRoute: HomeMarketingPricingRoute,
+  HomeMarketingProductsRoute: HomeMarketingProductsRoute,
+  HomeMarketingResourcesRoute: HomeMarketingResourcesRoute,
+  HomeGamesEmailRoute: HomeGamesEmailRoute,
+  HomeGamesUrlRoute: HomeGamesUrlRoute,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
 interface ProtectedRouteChildren {
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
 }
@@ -287,14 +316,9 @@ const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
+  HomeRoute: HomeRouteWithChildren,
   ProtectedRoute: ProtectedRouteWithChildren,
-  MarketingPricingRoute: MarketingPricingRoute,
-  MarketingProductsRoute: MarketingProductsRoute,
-  MarketingResourcesRoute: MarketingResourcesRoute,
-  GamesEmailRoute: GamesEmailRoute,
-  GamesUrlRoute: GamesUrlRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

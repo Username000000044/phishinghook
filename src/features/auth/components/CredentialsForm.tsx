@@ -42,6 +42,7 @@ export function CredientialsForm({ changeStep }: FormProps) {
         name: username,
         email,
         password,
+        image: `${import.meta.env.VITE_APP_URL}/brand/default-profile.png`,
         fetchOptions: {
           async onSuccess(context) {
             // Send OTP

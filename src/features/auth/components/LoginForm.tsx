@@ -77,10 +77,9 @@ export function LoginForm() {
   return (
     <Card className="bg-transparent border-none p-0">
       <CardHeader className="text-center p-0 space-y-2">
-        <CardTitle className="text-2xl">Sign Up for PhishHook</CardTitle>
+        <CardTitle className="text-2xl">Log In to PhishHook</CardTitle>
         <CardDescription className="text-muted-foreground">
-          Welcome to PhishHook, please enter sign up details and verify your
-          email to use the app.
+          Welcome to PhishHook, please enter log up details to use the app.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">

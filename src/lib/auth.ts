@@ -9,7 +9,6 @@ export const getSession = createServerFn({ method: "GET" }).handler(async () => 
     return session;
 });
 
-
 export const ensureSession = createServerFn({ method: "GET" }).handler(async () => {
     const headers = getRequestHeaders();
     const session = await auth.api.getSession({ headers });
