@@ -5,30 +5,85 @@ import {
   EmptyHeader,
   EmptyTitle,
 } from "@/components/ui/empty";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Check, ChevronDown, Paperclip, X } from "lucide-react";
+import { GameLeaderboardRow } from "./GameLeaderboardRow";
+import { Badge } from "@/components/ui/badge";
+import { useQuery } from "@tanstack/react-query";
+import { fetchLeaderboard } from "@/lib/game";
+import { EmailTemplate } from "./EmailTemplate";
 
 export function EmailGamePage() {
+  const { data, isPending, isError, error } = useQuery({
+    queryKey: ["todos", 1],
+    queryFn: () => fetchLeaderboard({ data: 1 }), // EMAIL GAME ID = 1
+    staleTime: 1000 * 60, // 1 minute
+  });
+
   return (
-    <div className="flex justify-center w-full">
-      <div className="p-10 [&>*]:w-full [&>*]:h-full">
-        <div className="grid grid-flow-col grid-rows-4 gap-4 max-h-150">
-          {/* 1 */}
-          <div className="md:col-span-3 md:row-span-3 border border-dashed">
-            <div className="w-200 h-100 bg-red-500"></div>
+    <div className="flex justify-center items-center h-full w-full md:p-5">
+      <div className="grid grid-cols-1 md:grid-cols-[3fr_1fr] w-full gap-5">
+        <div className="px-4 py-8">
+          <div className="flex justify-center w-full ">
+            <EmailTemplate />
           </div>
 
-          {/* 2 */}
-          <div className="flex w-full gap-4 h-20 md:col-span-3">
-            <Button className="h-full flex-1" variant="outline">
-              SCAM
+          <div className="flex justify-center gap-2">
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-45 rounded-md cursor-pointer rounded-none rounded-l-md"
+            >
+              <X /> Real
             </Button>
-            <Button className="h-full flex-1" variant="outline">
-              REAL
+            <Button
+              size="lg"
+              variant="outline"
+              className="w-45 rounded-md cursor-pointer rounded-none rounded-r-md"
+            >
+              <Check /> Fake
             </Button>
           </div>
-
-          {/* 3 */}
-          <div className="md:row-span-4 max-w-80">
-            <Empty className="border border-dashed h-full">
+        </div>
+        <ScrollArea className="py-2 px-4">
+          {data?.length && (
+            <Table className="text-muted-foreground">
+              <TableCaption className="text-sm text-muted">
+                <Badge className="text-muted" variant="outline">
+                  Top 10 global rankings.
+                </Badge>
+              </TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Rank</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Score</TableHead>
+                  <TableHead className="text-right">Accuracy</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((entry, index) => (
+                  <GameLeaderboardRow
+                    key={index}
+                    rank={index + 1}
+                    name={entry.name}
+                    score={entry.score}
+                    accuracy={+entry.accuracy}
+                  />
+                ))}
+              </TableBody>
+            </Table>
+          )}
+          {!data && (
+            <Empty className="p-0">
               <EmptyHeader>
                 <EmptyTitle>No Entries</EmptyTitle>
                 <EmptyDescription>
@@ -36,8 +91,8 @@ export function EmailGamePage() {
                 </EmptyDescription>
               </EmptyHeader>
             </Empty>
-          </div>
-        </div>
+          )}
+        </ScrollArea>
       </div>
     </div>
   );

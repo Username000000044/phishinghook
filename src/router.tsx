@@ -2,18 +2,19 @@ import { createRouter } from "@tanstack/react-router";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import { toast } from "sonner";
 
 // Create a new router instance
 export const getRouter = () => {
   const router = createRouter({
     defaultNotFoundComponent: () => <h1>404 Page Not Found</h1>,
-    defaultErrorComponent: ({ error, reset }) => (
-      <div>
-        <h1>Something went wrong!</h1>
-        <p>{error.message}</p>
-        <button onClick={() => reset()}>Try Again</button>
-      </div>
-    ),
+    defaultErrorComponent: ({ error, reset }) =>
+      toast.error(error.message),
+      //   <div>
+      //     <h1>Something went wrong!</h1>
+      //     <p>{error.message}</p>
+      //     <button onClick={() => reset()}>Try Again</button>
+      //   </div>
     defaultOnCatch: (error) => {
       if (
         error instanceof Error &&

@@ -1,18 +1,21 @@
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import { Session } from "@/features/auth/server/auth";
 import { getSession } from "@/lib/auth";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_home")({
   loader: async () => {
     const session = await getSession();
-    return session;
+    return { isAuthenicated: !!session, session };
   },
   component: () => {
     return (
-      <div className="container">
+      <div className="grid grid-rows-[auto_1fr_auto] h-screen p-5">
         <Header />
-        <Outlet />
+        <div className="container">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
     );
   },

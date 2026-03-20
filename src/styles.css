@@ -143,7 +143,6 @@ code {
 @utility container {
   @apply max-w-390;
   margin-inline: auto;
-  padding: 1rem;
 }
 
 /* fonts */

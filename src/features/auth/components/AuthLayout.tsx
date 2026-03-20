@@ -8,7 +8,7 @@ export const AuthLayout = ({ children }: { children: ReactNode }) => {
   const path = location.pathname;
 
   return (
-    <div className="container flex flex-col h-screen">
+    <div className="container flex flex-col h-screen p-5">
       <div className="flex flex-1 justify-center items-center">
         <div className="flex justify-center md:grid md:grid-cols-3 md:gap-4 max-h-170 h-full w-full">
           {/* Image */}
