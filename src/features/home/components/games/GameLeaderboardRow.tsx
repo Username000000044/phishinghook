@@ -20,12 +20,12 @@ export const GameLeaderboardRow = ({
       <TableCell className="font-medium">#{rank}</TableCell>
       <TableCell>{name}</TableCell>
       <TableCell>{score}</TableCell>
-      <TableCell className="text-right w-[125px]">
+      <TableCell className="text-right">
         <div
           className={cn("h-5 w-full rounded-sm px-2", {
-            "bg-emerald-200": calcAccuracy >= 80,
-            "bg-emerald-400": calcAccuracy >= 50 && calcAccuracy < 80,
-            "bg-emerald-800": calcAccuracy >= 0 && calcAccuracy < 50,
+            "bg-fuchsia-600": calcAccuracy >= 80,
+            "bg-fuchsia-500": calcAccuracy >= 50 && calcAccuracy < 80,
+            "bg-fuchsia-400": calcAccuracy >= 0 && calcAccuracy < 50,
           })}
         >
           <p className="text-background">{calcAccuracy}%</p>
