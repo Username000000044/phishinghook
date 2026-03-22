@@ -8,13 +8,17 @@ import { toast } from "sonner";
 export const getRouter = () => {
   const router = createRouter({
     defaultNotFoundComponent: () => <h1>404 Page Not Found</h1>,
-    defaultErrorComponent: ({ error, reset }) =>
-      toast.error(error.message),
-      //   <div>
-      //     <h1>Something went wrong!</h1>
-      //     <p>{error.message}</p>
-      //     <button onClick={() => reset()}>Try Again</button>
-      //   </div>
+    defaultErrorComponent: ({ error, reset }) => {
+      toast.error(error.message);
+
+      return (
+        <div>
+          <h1>Something went wrong!</h1>
+          <p>{error.message}</p>
+          <button onClick={() => reset()}>Try Again</button>
+        </div>
+      );
+    },
     defaultOnCatch: (error) => {
       if (
         error instanceof Error &&

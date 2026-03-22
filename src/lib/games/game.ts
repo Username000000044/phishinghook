@@ -2,6 +2,7 @@ import { db } from "@/db";
 import { game, userScore } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { createServerFn } from "@tanstack/react-start";
+import { Step } from "@/features/home/components/games/EmailPage";
 
 export const fetchLeaderboard = createServerFn({ method: "GET" })   
     .inputValidator((data: number) => data) 
@@ -24,7 +25,6 @@ export const fetchLeaderboard = createServerFn({ method: "GET" })
 
         return query;
     })
-
 
 // export const submitScoreFn = createServerFn({ method: "POST" })
 //     .handler(async ({ context }) => {
