@@ -28,60 +28,47 @@ export const EmailPlaying = ({
   //Reset Values
   useEffect(() => {
     setResult({
-      realAnswers: [],
-      userAnswers: [],
+      correct: 0,
+      currentQuestion: 1,
     });
   }, [setResult]);
 
   const [email, setEmail] = useState(() => generateEmail());
 
-  const QUESTIONS_AMOUNT = 10;
-
   // Submit Question
   const submitResponse = (res: "real" | "phishing") => {
-    let isRealUserAnswer = res === "real"; // is true if real
+    if (result == null) return <h1>Default values not set.</h1>;
+    console.log(result);
 
-    setResult((prev) => {
-      if (!prev) return prev;
-      return {
-        realAnswers: [...prev.realAnswers, email.isReal],
-        userAnswers: [...prev.userAnswers, isRealUserAnswer],
-      };
-    });
+    const isRealUserAnswer = res === "real";
+    const isRealAnswer = email.isReal;
 
-    if ((result?.userAnswers.length ?? 0) >= QUESTIONS_AMOUNT - 1) {
-      setStage("result");
-    } else {
+    if (isRealUserAnswer == isRealAnswer) {
+      const correct = result.correct;
+      const currentQuestion = result.currentQuestion;
+
+      setResult({
+        correct: correct + 1,
+        currentQuestion: currentQuestion + 1,
+      });
+
       setEmail(generateEmail());
+    } else {
+      setStage("result");
     }
   };
-
-  let wrongAnswers;
-  if (result?.realAnswers && result?.userAnswers) {
-    wrongAnswers = countIndexedDifferences(
-      result?.realAnswers,
-      result?.userAnswers,
-    );
-  }
-
-  const accuracy = (wrongAnswers ?? QUESTIONS_AMOUNT / QUESTIONS_AMOUNT) * 100;
 
   return (
     <Card className="bg-transparent border-none p-0">
       <CardHeader className="flex justify-between items-center text-center">
         <CardTitle className="text-2xl">
-          Question{" "}
-          {result?.userAnswers.length ? result?.userAnswers.length + 1 : 1}
+          Question {result?.currentQuestion}
         </CardTitle>
         <CardDescription>
           <div className="flex justify-center gap-2">
             <Badge className="h-min" variant="outline">
-              {/* 0.95 * 100 = 95% */}
-              <Target /> {accuracy}%
+              <Hash /> {result?.correct}
             </Badge>
-            {/* <Badge className="h-min" variant="outline">
-              <Hash /> 10
-            </Badge> */}
             <Badge className="h-min" variant="outline">
               <Timer /> 1:30
             </Badge>
@@ -136,20 +123,3 @@ export const EmailPlaying = ({
     </Card>
   );
 };
-
-function countIndexedDifferences(arr1: Array<boolean>, arr2: Array<boolean>) {
-  let differenceCount = 0;
-  const minLength = Math.min(arr1.length, arr2.length);
-
-  for (let i = 0; i < minLength; i++) {
-    if (arr1[i] !== arr2[i]) {
-      differenceCount++;
-    }
-  }
-  // If lengths are different, the remaining elements in the longer array are also differences
-  if (arr1.length !== arr2.length) {
-    differenceCount += Math.abs(arr1.length - arr2.length);
-  }
-
-  return differenceCount;
-}

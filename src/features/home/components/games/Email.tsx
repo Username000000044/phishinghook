@@ -6,8 +6,9 @@ import { EmailScore } from "./EmailScore";
 
 export type Step = "menu" | "playing" | "result";
 export type Result = {
-  userAnswers: Array<boolean>;
-  realAnswers: Array<boolean>;
+  correct: number;
+  currentQuestion: number;
+  time?: number;
 };
 export function EmailGamePage() {
   const [stage, setStage] = useState<Step>("menu");
