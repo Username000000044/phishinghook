@@ -1,6 +1,6 @@
 // Barrel File
 export { HomePage } from './components/HomePage'
-export { EmailGamePage } from './components/games/EmailPage'
+export { EmailGamePage } from './components/games/Email'
 export { URLGamePage } from './components/games/URLGamePage'
 export { ProductsPage } from './components/marketing/ProductsPage'
 export { PricingPage } from './components/marketing/PricingPage'
