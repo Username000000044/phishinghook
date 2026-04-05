@@ -1,4 +1,5 @@
 import {
+  ChevronDown,
   Cog,
   CornerDownRight,
   GeorgianLariIcon,
@@ -18,7 +19,7 @@ import {
   DropdownMenu,
   DropdownMenuLabel,
 } from "./ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useLocation, useRouter } from "@tanstack/react-router";
 import { getSession, signOutUser } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
@@ -61,15 +62,16 @@ export default function UserDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="empty" className="cursor-pointer">
-          <div className="flex gap-5 items-center">
-            <Avatar>
-              {/* <AvatarImage src={user?.image!} alt="Profile Picture" /> */}
-              <AvatarFallback>{name?.slice(0, 2)}</AvatarFallback>
-            </Avatar>
-            {trunicate(name)}
+        <div className="relative right-10">
+          <div className="flex px-2 py-1 bg-secondary rounded">
+            <Button variant="empty" className="cursor-pointer">
+              {trunicate(name)} <ChevronDown />
+            </Button>
           </div>
-        </Button>
+          <Avatar className="size-13 absolute left-27 top-1/2 -translate-y-1/2">
+            <AvatarFallback>DS</AvatarFallback>
+          </Avatar>
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuGroup>
