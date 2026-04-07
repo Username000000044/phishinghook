@@ -13,7 +13,7 @@ export default function Header() {
     <div>
       {/* Inorganic Shape */}
       <svg
-        className="-translate-x-25 md:translate-x-0 absolute text-primary -z-10"
+        className="-translate-x-25 md:translate-x-0 absolute text-primary/80 -z-10"
         width="202"
         height="284"
         viewBox="0 0 202 284"
@@ -90,7 +90,7 @@ export default function Header() {
             </li>
             <li>
               <Button variant="ghost" asChild>
-                <Link to="/products">Impact</Link>
+                <Link to="/impact">Impact</Link>
               </Button>
             </li>
             <li>
@@ -111,8 +111,8 @@ export default function Header() {
           {isAuthenicated && <UserDropdown />}
           {!isAuthenicated && (
             <Button className="bg-foreground" asChild>
-              <Link to="/signup">
-                Sign up <KeySquare />
+              <Link to="/login">
+                Login <KeySquare />
               </Link>
             </Button>
           )}

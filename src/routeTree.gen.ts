@@ -20,8 +20,8 @@ import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as HomeGamesUrlRouteImport } from './routes/_home/games/url'
 import { Route as HomeGamesEmailRouteImport } from './routes/_home/games/email'
 import { Route as HomeMarketingResourcesRouteImport } from './routes/_home/_marketing/resources'
-import { Route as HomeMarketingProductsRouteImport } from './routes/_home/_marketing/products'
 import { Route as HomeMarketingPricingRouteImport } from './routes/_home/_marketing/pricing'
+import { Route as HomeMarketingImpactRouteImport } from './routes/_home/_marketing/impact'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -75,21 +75,21 @@ const HomeMarketingResourcesRoute = HomeMarketingResourcesRouteImport.update({
   path: '/resources',
   getParentRoute: () => HomeRoute,
 } as any)
-const HomeMarketingProductsRoute = HomeMarketingProductsRouteImport.update({
-  id: '/_marketing/products',
-  path: '/products',
-  getParentRoute: () => HomeRoute,
-} as any)
 const HomeMarketingPricingRoute = HomeMarketingPricingRouteImport.update({
   id: '/_marketing/pricing',
   path: '/pricing',
   getParentRoute: () => HomeRoute,
 } as any)
+const HomeMarketingImpactRoute = HomeMarketingImpactRouteImport.update({
+  id: '/_marketing/impact',
+  path: '/impact',
+  getParentRoute: () => HomeRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
+  '/impact': typeof HomeMarketingImpactRoute
   '/pricing': typeof HomeMarketingPricingRoute
-  '/products': typeof HomeMarketingProductsRoute
   '/resources': typeof HomeMarketingResourcesRoute
   '/games/email': typeof HomeGamesEmailRoute
   '/games/url': typeof HomeGamesUrlRoute
@@ -100,8 +100,8 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
+  '/impact': typeof HomeMarketingImpactRoute
   '/pricing': typeof HomeMarketingPricingRoute
-  '/products': typeof HomeMarketingProductsRoute
   '/resources': typeof HomeMarketingResourcesRoute
   '/games/email': typeof HomeGamesEmailRoute
   '/games/url': typeof HomeGamesUrlRoute
@@ -116,8 +116,8 @@ export interface FileRoutesById {
   '/_home': typeof HomeRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
   '/_home/': typeof HomeIndexRoute
+  '/_home/_marketing/impact': typeof HomeMarketingImpactRoute
   '/_home/_marketing/pricing': typeof HomeMarketingPricingRoute
-  '/_home/_marketing/products': typeof HomeMarketingProductsRoute
   '/_home/_marketing/resources': typeof HomeMarketingResourcesRoute
   '/_home/games/email': typeof HomeGamesEmailRoute
   '/_home/games/url': typeof HomeGamesUrlRoute
@@ -130,8 +130,8 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/impact'
     | '/pricing'
-    | '/products'
     | '/resources'
     | '/games/email'
     | '/games/url'
@@ -142,8 +142,8 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/impact'
     | '/pricing'
-    | '/products'
     | '/resources'
     | '/games/email'
     | '/games/url'
@@ -157,8 +157,8 @@ export interface FileRouteTypes {
     | '/_home'
     | '/_protected'
     | '/_home/'
+    | '/_home/_marketing/impact'
     | '/_home/_marketing/pricing'
-    | '/_home/_marketing/products'
     | '/_home/_marketing/resources'
     | '/_home/games/email'
     | '/_home/games/url'
@@ -254,18 +254,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeMarketingResourcesRouteImport
       parentRoute: typeof HomeRoute
     }
-    '/_home/_marketing/products': {
-      id: '/_home/_marketing/products'
-      path: '/products'
-      fullPath: '/products'
-      preLoaderRoute: typeof HomeMarketingProductsRouteImport
-      parentRoute: typeof HomeRoute
-    }
     '/_home/_marketing/pricing': {
       id: '/_home/_marketing/pricing'
       path: '/pricing'
       fullPath: '/pricing'
       preLoaderRoute: typeof HomeMarketingPricingRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/_home/_marketing/impact': {
+      id: '/_home/_marketing/impact'
+      path: '/impact'
+      fullPath: '/impact'
+      preLoaderRoute: typeof HomeMarketingImpactRouteImport
       parentRoute: typeof HomeRoute
     }
   }
@@ -285,8 +285,8 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface HomeRouteChildren {
   HomeIndexRoute: typeof HomeIndexRoute
+  HomeMarketingImpactRoute: typeof HomeMarketingImpactRoute
   HomeMarketingPricingRoute: typeof HomeMarketingPricingRoute
-  HomeMarketingProductsRoute: typeof HomeMarketingProductsRoute
   HomeMarketingResourcesRoute: typeof HomeMarketingResourcesRoute
   HomeGamesEmailRoute: typeof HomeGamesEmailRoute
   HomeGamesUrlRoute: typeof HomeGamesUrlRoute
@@ -294,8 +294,8 @@ interface HomeRouteChildren {
 
 const HomeRouteChildren: HomeRouteChildren = {
   HomeIndexRoute: HomeIndexRoute,
+  HomeMarketingImpactRoute: HomeMarketingImpactRoute,
   HomeMarketingPricingRoute: HomeMarketingPricingRoute,
-  HomeMarketingProductsRoute: HomeMarketingProductsRoute,
   HomeMarketingResourcesRoute: HomeMarketingResourcesRoute,
   HomeGamesEmailRoute: HomeGamesEmailRoute,
   HomeGamesUrlRoute: HomeGamesUrlRoute,

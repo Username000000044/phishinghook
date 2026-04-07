@@ -23,6 +23,7 @@ import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { useLocation, useRouter } from "@tanstack/react-router";
 import { getSession, signOutUser } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "./ui/skeleton";
 
 function useSession() {
   return useQuery({
@@ -34,7 +35,7 @@ function useSession() {
 
 export default function UserDropdown() {
   const router = useRouter();
-  const { data } = useSession();
+  const { data, isLoading } = useSession();
 
   const currentPath = useLocation({
     select: (location) => location.pathname,
@@ -60,51 +61,58 @@ export default function UserDropdown() {
   };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <div className="relative right-10">
-          <div className="flex px-2 py-1 bg-secondary rounded">
-            <Button variant="empty" className="cursor-pointer">
-              {trunicate(name)} <ChevronDown />
-            </Button>
-          </div>
-          <Avatar className="size-13 absolute left-27 top-1/2 -translate-y-1/2">
-            <AvatarFallback>DS</AvatarFallback>
-          </Avatar>
-        </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuGroup>
-          <DropdownMenuLabel className="text-muted-foreground text-xs">
-            Session
-          </DropdownMenuLabel>
-          {currentPath.includes("/dashboard") ? null : (
-            <DropdownMenuItem
-              className="cursor-pointer"
-              onClick={handleDasboard}
-            >
-              <LayoutDashboard />
-              Dashboard
-            </DropdownMenuItem>
-          )}
+    <div>
+      {isLoading && <Skeleton className="h-10 w-40" />}
+      {!isLoading && (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="relative right-10">
+              <div className="flex px-2 py-1 bg-secondary rounded">
+                <Button variant="empty" className="cursor-pointer">
+                  {trunicate(name)} <ChevronDown />
+                </Button>
+              </div>
+              <Avatar className="size-13 absolute left-34 top-1/2 -translate-y-1/2">
+                <AvatarFallback>
+                  {name?.substring(0, 2).toLocaleUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="text-muted-foreground text-xs">
+                Session
+              </DropdownMenuLabel>
+              {currentPath.includes("/dashboard") ? null : (
+                <DropdownMenuItem
+                  className="cursor-pointer"
+                  onClick={handleDasboard}
+                >
+                  <LayoutDashboard />
+                  Dashboard
+                </DropdownMenuItem>
+              )}
 
-          <DropdownMenuItem>
-            <Cog />
-            Profile
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem
-            variant="destructive"
-            className="cursor-pointer"
-            onClick={handleSignOut}
-          >
-            <LogOut />
-            Sign Out
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+              <DropdownMenuItem>
+                <Cog />
+                Profile
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuGroup>
+              <DropdownMenuItem
+                variant="destructive"
+                className="cursor-pointer"
+                onClick={handleSignOut}
+              >
+                <LogOut />
+                Sign Out
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+    </div>
   );
 }

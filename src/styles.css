@@ -6,7 +6,7 @@
 body {
   @apply m-0;
   font-family:
-    -apple-system, BlinkMacSystemFont, 'Geist', 'tSegoe UI', 'Roboo', 'Oxygen', 'Ubuntu',
+    -apple-system, BlinkMacSystemFont, 'Poppins', 'tSegoe UI', 'Roboo', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -191,6 +191,7 @@ code {
 @utility container {
   @apply max-w-450;
   margin-inline: auto;
+
 }
 
 @utility grid-row-layout {
@@ -202,13 +203,25 @@ code {
 @utility grid-col-layout {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
   padding: 0 1rem;
+}
+
+@utility dotted-background {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -40;
+  background-image: radial-gradient(var(--accent) 1px, transparent 1px);
+  background-size: 25px 25px;
+  /* Creates a radial fade-out effect */
 }
 
 /* md */
 @media screen and (width >= 48rem) {
   .grid-col-layout {
     grid-template-columns: repeat(8, minmax(0, 1fr));
+    padding: 0 8rem;
   }
 }
 /* lg */

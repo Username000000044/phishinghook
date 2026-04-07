@@ -1,12 +1,70 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { PricingCard } from "./PricingCard";
+import { Button } from "@/components/ui/button";
+import { Link } from "@tanstack/react-router";
+import { Coins, KeySquare, Mail } from "lucide-react";
+
+const pricingData = [
+  {
+    id: "starter",
+    title: "Starter",
+    perks: [
+      "10 phishing simulation emails per month",
+      "1 user account",
+      "Basic email templates",
+      "Manual campaign sending",
+      "Basic reporting dashboard",
+      "Email support",
+    ],
+    monthly: 0,
+    annual: 0,
+  },
+  {
+    id: "team",
+    title: "Team",
+    perks: [
+      "20 phishing simulation emails per user/month",
+      "Up to 10 users",
+      "Advanced template library",
+      "Custom email templates",
+      "Scheduled campaigns",
+      "Team performance analytics",
+      "CSV user import",
+      "Basic phishing awareness training modules",
+      "Priority email support",
+    ],
+    monthly: 199,
+    annual: 899,
+    most_popular: true,
+  },
+  {
+    id: "organization",
+    title: "Organization",
+    perks: [
+      "Unlimited phishing simulation emails",
+      "Up to 200 users",
+      "Full template library + custom templates",
+      "Automated & recurring campaigns",
+      "Advanced analytics & reporting",
+      "Real-time tracking & alerts",
+      "User segmentation & targeting",
+      "SSO / SAML integration",
+      "API access",
+      "Compliance-ready reporting (SOC2, HIPAA, etc.)",
+      "Dedicated account manager",
+      "Priority support + SLA",
+    ],
+    monthly: 200,
+    annual: 1299,
+  },
+];
 
 export function HomePage() {
   return (
-    <div className="relative container grid-col-layout">
+    <div className="relative container grid-col-layout mt-30">
       {/* Fishing Hook + Card */}
-      <div className="xl:block hidden absolute col-start-9 -translate-y-26">
+      <div className="xl:block hidden absolute col-start-10 -translate-y-54">
         {/* Line */}
         <svg
           className="text-chart-4 relative z-20"
@@ -39,35 +97,47 @@ export function HomePage() {
           <path
             d="M8.04473 52.4482C5.83434 43.9232 6.01597 28.9246 8.46292 17.2247C9.41343 12.68 12.3598 8.86593 13.0029 6.75158C13.6267 4.70034 11.4876 15.6947 11.8638 23.9801C13.9547 29.7084 16.9778 33.6252 20.0054 36.9736C21.5305 38.6603 23.0329 40.3219 27.6162 45.3905"
             stroke="currentColor"
-            stroke-width="13"
+            strokeWidth="13"
           />
         </svg>
       </div>
 
       {/* Hero */}
-      <section className="col-span-4 mt-30 mb-20 md:col-start-2 lg:col-start-2 md:col-span-8 lg:col-span-12">
-        <h1 className="text-[5rem] font-bold leading-18 lg:text-[6rem] lg:leading-20">
+      <section className="col-span-full mb-20 md:mb-40">
+        <h1 className="break-all text-[4.3rem] font-bold leading-16 lg:text-[6rem] lg:leading-20 wrap-all">
           DIGITAL
           <span className="relative flex flex-col md:flex-row md:gap-4">
-            <span className="flex items-end">
+            <span className="flex items-end text-primary">
               MAIL&thinsp;
               <div className="mx-2 h-12 w-12 lg:w-12 lg:h-12 rounded-full bg-gradient-to-r from-white from-50% to-primary to-50% mb-1"></div>
             </span>
-            <span className="text-primary">SECURITY</span>
+            SECURITY
           </span>
           TRAINING
         </h1>
-        <h2 className="mt-4 text-3xl text-muted">
+        <h2 className="mt-4 text-2xl md:text-3xl text-muted">
           Online phishing training for any user of the internet.
         </h2>
+        <div className="mt-8 flex gap-4">
+          <Button size="lg" asChild>
+            <Link to="." hash="prices">
+              <Coins /> Prices
+            </Link>
+          </Button>
+          <Button size="lg" variant="outline" asChild>
+            <Link to="/signup">
+              <Mail /> Start Free
+            </Link>
+          </Button>
+        </div>
       </section>
 
       {/* Cards */}
-      <ScrollArea className="col-span-4 md:col-span-8 md:col-start-2 lg:col-start-2 lg:col-span-12">
+      <ScrollArea id="prices" className="col-span-full">
         <div className="flex gap-4">
-          <PricingCard />
-          <PricingCard />
-          <PricingCard />
+          {pricingData.map((data) => (
+            <PricingCard pricingData={data} key={data.id} />
+          ))}
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
