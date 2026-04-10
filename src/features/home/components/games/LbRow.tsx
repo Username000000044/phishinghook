@@ -8,12 +8,7 @@ interface RowTypes {
   accuracy: number;
 }
 
-export const GameLeaderboardRow = ({
-  rank,
-  name,
-  score,
-  accuracy,
-}: RowTypes) => {
+export const LbRow = ({ rank, name, score, accuracy }: RowTypes) => {
   const calcAccuracy = Math.floor(accuracy * 100);
   return (
     <TableRow>

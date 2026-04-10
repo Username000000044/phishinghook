@@ -204,15 +204,19 @@ code {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.5rem;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 @utility dotted-background {
   width: 100%;
   height: 100%;
-  position: absolute;
+
+  position: fixed;
+  overflow: auto;
+  
+
   z-index: -40;
-  background-image: radial-gradient(var(--accent) 1px, transparent 1px);
+  background-image: radial-gradient(var(--secondary) 1px, transparent 1px);
   background-size: 25px 25px;
   /* Creates a radial fade-out effect */
 }

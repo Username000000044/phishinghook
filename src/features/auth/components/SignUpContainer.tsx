@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CredientialsForm } from "./CredentialsForm";
+import { SignUpForm } from "./SignUpForm";
 import { OTPForm } from "./OTPForm";
 
 type SignUpStep = "credentials" | "otp";
@@ -15,7 +15,7 @@ export function SignUpContainer() {
     email: string;
     maskedEmail: string;
   }) => {
-    // Email is passed up from CredentialsForm
+    // Email is passed up from SignUpForm
     setUserEmail({ email, maskedEmail });
     setStep("otp");
   };
@@ -23,7 +23,7 @@ export function SignUpContainer() {
   return (
     <div>
       {step === "credentials" ? (
-        <CredientialsForm changeStep={handleChangeStep} />
+        <SignUpForm changeStep={handleChangeStep} />
       ) : (
         <OTPForm email={userEmail.email} maskedEmail={userEmail.maskedEmail} />
       )}

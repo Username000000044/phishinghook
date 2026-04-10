@@ -2,7 +2,7 @@ import { db } from "@/db";
 import { game, userScore } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { createServerFn } from "@tanstack/react-start";
-import { Step } from "@/features/home/components/games/Email";
+import { Step } from "@/features/home/components/games/EmailPage";
 
 export const fetchLeaderboard = createServerFn({ method: "GET" })
   .inputValidator((data: number) => data)

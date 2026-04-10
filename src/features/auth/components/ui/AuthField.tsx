@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Field, FieldError } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   InputGroup,
@@ -44,8 +44,9 @@ export function AuthField({
 
   if (type == "password") {
     return (
-      <Field data-invalid={isInvalid}>
-        <InputGroup className="rounded-none h-10">
+      <Field data-invalid={isInvalid} className="gap-1">
+        <FieldLabel>{capitalizeFirstLetter(field.name)}</FieldLabel>
+        <InputGroup className="rounded-none h-10 !bg-foreground text-secondary rounded-md">
           <InputGroupInput
             id={field.name}
             name={field.name}
@@ -75,9 +76,10 @@ export function AuthField({
     );
   } else {
     return (
-      <Field data-invalid={isInvalid}>
+      <Field data-invalid={isInvalid} className="gap-1">
+        <FieldLabel>{capitalizeFirstLetter(field.name)}</FieldLabel>
         <Input
-          className="h-10 rounded-none"
+          className="h-10 !bg-foreground text-secondarys"
           id={field.name}
           name={field.name}
           value={field.state.value}
@@ -92,4 +94,8 @@ export function AuthField({
       </Field>
     );
   }
+}
+
+function capitalizeFirstLetter(val: any) {
+  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }

@@ -15,7 +15,7 @@ import { signUpSchema } from "../schemas/auth.schema";
 import { authClient } from "../client/auth-client";
 import { maskEmail } from "../server/utils";
 import { toast } from "sonner";
-import { GoogleOneTap } from "./GoogleOneTap";
+import { GoogleOneTap } from "./oauth/GoogleOneTap";
 
 interface FormProps {
   changeStep: ({
@@ -27,7 +27,7 @@ interface FormProps {
   }) => void;
 }
 
-export function CredientialsForm({ changeStep }: FormProps) {
+export function SignUpForm({ changeStep }: FormProps) {
   const form = useForm({
     defaultValues: {
       username: "",

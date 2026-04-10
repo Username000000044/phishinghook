@@ -15,8 +15,8 @@ export function GoogleOneTap() {
           container: buttonRef.current,
           config: {
             theme: "filled_black",
-            size: "medium",
-            type: "standard",
+            size: "large",
+            type: "icon",
           },
         },
         fetchOptions: {
@@ -32,8 +32,8 @@ export function GoogleOneTap() {
 
   return (
     <div>
-      {isLoading && <Skeleton className="h-[30px] w-[180px]" />}
-      {!isLoading && <div ref={buttonRef}></div>}
+      {isLoading && <Skeleton className="size-10" />}
+      {!isLoading && <div className="" ref={buttonRef}></div>}
     </div>
   );
 }

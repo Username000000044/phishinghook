@@ -62,7 +62,7 @@ const pricingData = [
 
 export function HomePage() {
   return (
-    <div className="relative container grid-col-layout mt-30">
+    <div className="relative container grid-col-layout">
       {/* Fishing Hook + Card */}
       <div className="xl:block hidden absolute col-start-10 -translate-y-54">
         {/* Line */}

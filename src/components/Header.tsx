@@ -1,13 +1,19 @@
-import { getRouteApi, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { Badge } from "@ui/badge";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@ui/hover-card";
 import { KeySquare, MailQuestionMark, QrCode } from "lucide-react";
 import { Button } from "@ui/button";
 import UserDropdown from "./UserDropdown";
+import { useQuery } from "@tanstack/react-query";
+import { isAuthenticated } from "@/lib/auth";
 
 export default function Header() {
-  const routeApi = getRouteApi("/_home");
-  const { isAuthenicated } = routeApi.useLoaderData();
+  // check if user isAuthenicated
+
+  const { data: isAuthenicated } = useQuery({
+    queryKey: ["isAuthenticated"],
+    queryFn: isAuthenticated,
+  });
 
   return (
     <div>
@@ -26,7 +32,7 @@ export default function Header() {
         />
       </svg>
 
-      <header className="w-full flex justify-between items-center px-4 mt-13 md:mt-11 md:px-8">
+      <header className="w-full flex justify-between items-center px-4 mt-13 mb-25 md:mb-30 md:mt-11 md:px-8">
         {/* left */}
         <div className="flex items-center gap-5">
           <Link to="/">
@@ -107,7 +113,8 @@ export default function Header() {
         </nav>
 
         {/* right */}
-        <div className="flex gap-5">
+
+        <div>
           {isAuthenicated && <UserDropdown />}
           {!isAuthenicated && (
             <Button className="bg-foreground" asChild>
@@ -116,6 +123,43 @@ export default function Header() {
               </Link>
             </Button>
           )}
+        </div>
+      </header>
+    </div>
+  );
+}
+
+export function BareHeader() {
+  return (
+    <div>
+      {/* Inorganic Shape */}
+      <svg
+        className="-translate-x-25 md:translate-x-0 absolute text-primary/80 -z-10"
+        width="202"
+        height="284"
+        viewBox="0 0 202 284"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M57 -17C65.8366 -17 73 -9.83656 73 -1V15C73 23.8366 80.1634 31 89 31H186C194.837 31 202 38.1634 202 47V88C202 96.8366 194.837 104 186 104H89C80.1634 104 73 111.163 73 120V268C73 276.837 65.8366 284 57 284H4C-4.83656 284 -12 276.837 -12 268V-1C-12 -9.83656 -4.83656 -17 4 -17H57Z"
+          fill="currentColor"
+        />
+      </svg>
+
+      <header className="w-full px-4 mt-13 mb-25 md:mb-30 md:px-8">
+        {/* left */}
+        <div className="flex items-center gap-5">
+          <Link to="/">
+            <img
+              src="/brand/pish-black.svg"
+              width="70"
+              alt="PhishingHook Logo"
+            />
+          </Link>
+          <Badge variant="secondary" className="h-min hidden md:block">
+            Alpha
+          </Badge>
         </div>
       </header>
     </div>

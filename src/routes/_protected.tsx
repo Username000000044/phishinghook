@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_protected")({
       });
     }
 
-    return { user: session.user };
+    return { session };
   },
   component: () => <Outlet />,
 });

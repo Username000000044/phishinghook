@@ -11,11 +11,11 @@ import {
   TableHead,
   TableBody,
 } from "@/components/ui/table";
-import { GameLeaderboardRow } from "./GameLeaderboardRow";
+import { GameLeaderboardRow, LbRow } from "./LbRow";
 import { fetchLeaderboard } from "@/lib/games/game";
 import { useQuery } from "@tanstack/react-query";
 
-export const EmailLeaderboard = () => {
+export const Leaderboard = () => {
   const { data, isPending, isError, error } = useQuery({
     queryKey: ["todos", 1],
     queryFn: () => fetchLeaderboard({ data: 1 }), // EMAIL GAME ID = 1
@@ -36,7 +36,7 @@ export const EmailLeaderboard = () => {
           </TableHeader>
           <TableBody>
             {data.map((entry, index) => (
-              <GameLeaderboardRow
+              <LbRow
                 key={index}
                 rank={index + 1}
                 name={entry.name}

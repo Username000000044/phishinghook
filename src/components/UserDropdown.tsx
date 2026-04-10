@@ -1,14 +1,4 @@
-import {
-  ChevronDown,
-  Cog,
-  CornerDownRight,
-  GeorgianLariIcon,
-  LayoutDashboard,
-  LogOut,
-  PencilIcon,
-  ShareIcon,
-  TrashIcon,
-} from "lucide-react";
+import { ChevronDown, Cog, LayoutDashboard, LogOut } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenuTrigger,
@@ -19,11 +9,12 @@ import {
   DropdownMenu,
   DropdownMenuLabel,
 } from "./ui/dropdown-menu";
-import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useLocation, useRouter } from "@tanstack/react-router";
-import { getSession, signOutUser } from "@/lib/auth";
+import { getSession } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "./ui/skeleton";
+import { useSignOut } from "@/hooks/auth";
 
 function useSession() {
   return useQuery({
@@ -34,6 +25,7 @@ function useSession() {
 }
 
 export default function UserDropdown() {
+  const signOut = useSignOut();
   const router = useRouter();
   const { data, isLoading } = useSession();
 
@@ -56,10 +48,6 @@ export default function UserDropdown() {
     router.navigate({ to: "/dashboard" });
   };
 
-  const handleSignOut = async () => {
-    await signOutUser(router);
-  };
-
   return (
     <div>
       {isLoading && <Skeleton className="h-10 w-40" />}
@@ -69,7 +57,7 @@ export default function UserDropdown() {
             <div className="relative right-10">
               <div className="flex px-2 py-1 bg-secondary rounded">
                 <Button variant="empty" className="cursor-pointer">
-                  {trunicate(name)} <ChevronDown />
+                  {trunicate(name) || "undefined"} <ChevronDown />
                 </Button>
               </div>
               <Avatar className="size-13 absolute left-34 top-1/2 -translate-y-1/2">
@@ -104,7 +92,7 @@ export default function UserDropdown() {
               <DropdownMenuItem
                 variant="destructive"
                 className="cursor-pointer"
-                onClick={handleSignOut}
+                onClick={signOut}
               >
                 <LogOut />
                 Sign Out
