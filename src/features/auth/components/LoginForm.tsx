@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -17,7 +18,7 @@ import { toast } from "sonner";
 import { GoogleOneTap } from "./oauth/GoogleOneTap";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -82,6 +83,16 @@ export function LoginForm() {
           Enter your <span className="underline decoration-wavy">secure</span>{" "}
           credentials to access the phishing hook app.
         </CardDescription>
+        <CardAction>
+          <Button
+            size="xs"
+            variant="secondary"
+            className="cursor-pointer text-muted-foreground"
+            asChild
+          >
+            <Link to="/signup">sign up</Link>
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent className="p-0">
         <form

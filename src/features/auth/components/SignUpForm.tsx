@@ -1,6 +1,7 @@
 import { useForm } from "@tanstack/react-form";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -15,7 +16,7 @@ import { signUpSchema } from "../schemas/auth.schema";
 import { authClient } from "../client/auth-client";
 import { maskEmail } from "../server/utils";
 import { toast } from "sonner";
-import { GoogleOneTap } from "./oauth/GoogleOneTap";
+import { Link } from "@tanstack/react-router";
 
 interface FormProps {
   changeStep: ({
@@ -77,13 +78,23 @@ export function SignUpForm({ changeStep }: FormProps) {
   });
 
   return (
-    <Card className="bg-transparent border-none p-0">
-      <CardHeader className="text-center p-0 space-y-2">
-        <CardTitle className="text-2xl">Sign Up for PhishHook</CardTitle>
-        <CardDescription className="text-muted-foreground">
-          Welcome to PhishHook, please enter sign up details and verify your
-          email to use the app.
+    <Card className="bg-transparent border-none p-0 m-0 w-full">
+      <CardHeader className="p-0 text-muted">
+        <CardTitle className="text-4xl text-primary">SIGN UP</CardTitle>
+        <CardDescription className="text-muted text-lg">
+          Enter your <span className="underline decoration-wavy">secure</span>{" "}
+          credentials to access the phishing hook app.
         </CardDescription>
+        <CardAction>
+          <Button
+            size="xs"
+            variant="secondary"
+            className="cursor-pointer text-muted-foreground"
+            asChild
+          >
+            <Link to="/login">log in</Link>
+          </Button>
+        </CardAction>
       </CardHeader>
       <CardContent className="p-0">
         <form
@@ -126,7 +137,7 @@ export function SignUpForm({ changeStep }: FormProps) {
           </FieldGroup>
         </form>
       </CardContent>
-      <CardFooter className="flex flex-col text-center w-full p-0">
+      <CardFooter className="flex flex-col text-center w-full p-0  mt-2">
         <form.Subscribe
           selector={(state) => state.isSubmitting}
           children={(isSubmitting) => (
@@ -142,17 +153,6 @@ export function SignUpForm({ changeStep }: FormProps) {
             </Field>
           )}
         ></form.Subscribe>
-
-        {/* Oauth */}
-        <section className="flex flex-col items-center space-y-4 mt-4 w-full">
-          <div className="flex justify-center items-center gap-5 w-full">
-            <hr className="bg-muted w-full h-[1px]" />
-            <p className="text-xs text-muted">OR</p>
-            <hr className="bg-muted w-full h-[1px]" />
-          </div>
-
-          <GoogleOneTap />
-        </section>
       </CardFooter>
     </Card>
   );

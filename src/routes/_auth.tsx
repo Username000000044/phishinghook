@@ -44,21 +44,13 @@ export const Route = createFileRoute("/_auth")({
                 <hr className="bg-muted w-full h-[1px]" />
               </div>
 
+              {/* OAUTH */}
               <div className="flex items-center gap-4">
                 <GoogleOneTap />
                 <Github />
               </div>
             </section>
           </section>
-
-          {/* OAUTH */}
-          {/* <section className="hidden xl:flex flex-col justify-end">
-            <div className="space-y-4">
-              <Github />
-              <GoogleOneTap />
-            </div>
-            <p className="text-xs text-muted">OAUTH</p>
-          </section> */}
         </div>
         <Footer />
       </div>

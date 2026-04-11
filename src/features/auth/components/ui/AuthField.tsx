@@ -46,7 +46,7 @@ export function AuthField({
     return (
       <Field data-invalid={isInvalid} className="gap-1">
         <FieldLabel>{capitalizeFirstLetter(field.name)}</FieldLabel>
-        <InputGroup className="rounded-none h-10 !bg-foreground text-secondary rounded-md">
+        <InputGroup className="h-10 !bg-foreground text-secondary">
           <InputGroupInput
             id={field.name}
             name={field.name}
@@ -79,7 +79,7 @@ export function AuthField({
       <Field data-invalid={isInvalid} className="gap-1">
         <FieldLabel>{capitalizeFirstLetter(field.name)}</FieldLabel>
         <Input
-          className="h-10 !bg-foreground text-secondarys"
+          className="h-10 !bg-foreground text-secondary"
           id={field.name}
           name={field.name}
           value={field.state.value}

@@ -21,7 +21,7 @@ export function SignUpContainer() {
   };
 
   return (
-    <div>
+    <div className="w-full">
       {step === "credentials" ? (
         <SignUpForm changeStep={handleChangeStep} />
       ) : (

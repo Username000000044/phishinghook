@@ -13,6 +13,7 @@ export default function Header() {
   const { data: isAuthenicated } = useQuery({
     queryKey: ["isAuthenticated"],
     queryFn: isAuthenticated,
+    staleTime: Infinity,
   });
 
   return (

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/input-otp";
 import { useForm } from "@tanstack/react-form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { authClient } from "../client/auth-client";
 import { toast } from "sonner";
 
@@ -101,7 +101,9 @@ export function OTPForm({
   return (
     <Card className="bg-transparent border-none p-0">
       <CardHeader className="text-center p-0 space-y-2">
-        <CardTitle className="text-3xl">OTP Verification</CardTitle>
+        <CardTitle className="text-5xl text-primary">
+          OTP Verification
+        </CardTitle>
         <CardDescription className="text-muted-foreground">
           To verify your account, enter OTP code sent to:
           <span className="block">[{maskedEmail || "Unknown Email"}]</span>
@@ -145,13 +147,13 @@ export function OTPForm({
                           data-invalid={isInvalid}
                           disabled={isSubmitting}
                         >
-                          <InputOTPGroup>
+                          <InputOTPGroup className="!bg-foreground text-secondary rounded-md">
                             <InputOTPSlot index={0} />
                             <InputOTPSlot index={1} />
                             <InputOTPSlot index={2} />
                           </InputOTPGroup>
                           <InputOTPSeparator />
-                          <InputOTPGroup>
+                          <InputOTPGroup className="!bg-foreground text-secondary rounded-md">
                             <InputOTPSlot index={3} />
                             <InputOTPSlot index={4} />
                             <InputOTPSlot index={5} />
