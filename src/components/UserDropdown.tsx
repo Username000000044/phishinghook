@@ -15,19 +15,16 @@ import { getSession } from "@/lib/auth";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "./ui/skeleton";
 import { useSignOut } from "@/hooks/auth";
-
-function useSession() {
-  return useQuery({
-    queryKey: ["session"],
-    queryFn: getSession,
-    staleTime: Infinity,
-  });
-}
+import { useState } from "react";
 
 export default function UserDropdown() {
   const signOut = useSignOut();
   const router = useRouter();
-  const { data, isLoading } = useSession();
+  const { data, isLoading } = useQuery({
+    queryKey: ["session"],
+    queryFn: getSession,
+  });
+  const [isOpen, setIsOpen] = useState(false);
 
   const currentPath = useLocation({
     select: (location) => location.pathname,
@@ -52,16 +49,19 @@ export default function UserDropdown() {
     <div>
       {isLoading && <Skeleton className="h-10 w-40" />}
       {!isLoading && (
-        <DropdownMenu>
+        <DropdownMenu open={isOpen} onOpenChange={() => setIsOpen(!isOpen)}>
           <DropdownMenuTrigger asChild>
-            <div className="relative right-10">
-              <div className="flex px-2 py-1 bg-secondary rounded">
-                <Button variant="empty" className="cursor-pointer">
-                  {trunicate(name) || "undefined"} <ChevronDown />
-                </Button>
-              </div>
-              <Avatar className="size-13 absolute left-34 top-1/2 -translate-y-1/2">
-                <AvatarFallback>
+            <div className="flex items-center gap-2 rounded-md">
+              <Button variant="ghost" className="cursor-pointer">
+                {trunicate(name) || "NO NAME"}{" "}
+                {isOpen ? (
+                  <ChevronDown className="transition-transform duration-300 ease-in-out" />
+                ) : (
+                  <ChevronDown className="rotate-180 transition-transform duration-300 ease-in-out" />
+                )}
+              </Button>
+              <Avatar size="lg">
+                <AvatarFallback className="rounded-sm">
                   {name?.substring(0, 2).toLocaleUpperCase()}
                 </AvatarFallback>
               </Avatar>

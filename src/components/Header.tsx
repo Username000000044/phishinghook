@@ -5,14 +5,14 @@ import { KeySquare, MailQuestionMark, QrCode } from "lucide-react";
 import { Button } from "@ui/button";
 import UserDropdown from "./UserDropdown";
 import { useQuery } from "@tanstack/react-query";
-import { isAuthenticated } from "@/lib/auth";
+import { getSession, isAuthenticated } from "@/lib/auth";
 
 export default function Header() {
   // check if user isAuthenicated
 
-  const { data: isAuthenicated } = useQuery({
-    queryKey: ["isAuthenticated"],
-    queryFn: isAuthenticated,
+  const { data: session } = useQuery({
+    queryKey: ["session"],
+    queryFn: getSession,
     staleTime: Infinity,
   });
 
@@ -116,8 +116,8 @@ export default function Header() {
         {/* right */}
 
         <div>
-          {isAuthenicated && <UserDropdown />}
-          {!isAuthenicated && (
+          {session && <UserDropdown />}
+          {!session && (
             <Button className="bg-foreground" asChild>
               <Link to="/login">
                 Login <KeySquare />

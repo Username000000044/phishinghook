@@ -1,3 +1,5 @@
+import Footer from "@/components/Footer";
+import { BareHeader } from "@/components/Header";
 import { getSession } from "@/lib/auth";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
@@ -14,5 +16,11 @@ export const Route = createFileRoute("/_protected")({
 
     return { session };
   },
-  component: () => <Outlet />,
+  component: () => (
+    <div className="grid-row-layout">
+      <BareHeader />
+      <Outlet />
+      <Footer />
+    </div>
+  ),
 });

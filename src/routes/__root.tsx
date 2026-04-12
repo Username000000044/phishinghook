@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import appCss from "../styles.css?url";
 import Header from "@/components/Header";
 import { getSession } from "@/lib/auth";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const queryClient = new QueryClient();
 
@@ -44,13 +45,15 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark ">
+    <html lang="en" className="dark">
       <head>
         <HeadContent />
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <div className="dotted-background">{children}</div>
+          <div className="dotted-background">
+            <TooltipProvider>{children}</TooltipProvider>
+          </div>
           <Toaster />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

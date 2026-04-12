@@ -19,6 +19,7 @@ export function GoogleOneTap() {
             type: "icon",
           },
         },
+        cancelOnTapOutside: true,
         fetchOptions: {
           onSuccess: () => {
             navigate({ to: "/dashboard" });
