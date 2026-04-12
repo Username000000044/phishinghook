@@ -15,6 +15,7 @@ import {
   FileDown,
   List,
   ListPlus,
+  LucideIcon,
   MailSearch,
 } from "lucide-react";
 import { VariantProps } from "class-variance-authority";
@@ -24,23 +25,30 @@ import { Separator } from "./ui/separator";
 type ButtonProps = VariantProps<typeof buttonVariants>;
 type buttonVariant = NonNullable<ButtonProps["variant"]>;
 
-const navigationItems = [
+interface Items {
+  tooltip: string;
+  href: string;
+  variant: buttonVariant;
+  icon: LucideIcon;
+}
+
+const navigationItems: Items[] = [
   {
     tooltip: "Create Schedule",
     href: "/dashboard/schedule",
-    variant: "outline" as buttonVariant,
+    variant: "outline",
     icon: ListPlus,
   },
   {
     tooltip: "View Emails",
     href: "/dashboard/emails",
-    variant: "outline" as buttonVariant,
+    variant: "outline",
     icon: MailSearch,
   },
   {
     tooltip: "Export Report",
     href: "/dashboard/export",
-    variant: "outline" as buttonVariant,
+    variant: "outline",
     icon: ArrowRightFromLine,
   },
 ];
