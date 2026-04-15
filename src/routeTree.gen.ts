@@ -17,6 +17,7 @@ import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ProtectedDashboardReportRouteImport } from './routes/_protected/dashboard/report'
 import { Route as HomeGamesUrlRouteImport } from './routes/_home/games/url'
 import { Route as HomeGamesEmailRouteImport } from './routes/_home/games/email'
 import { Route as HomeMarketingResourcesRouteImport } from './routes/_home/_marketing/resources'
@@ -60,6 +61,12 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedDashboardReportRoute =
+  ProtectedDashboardReportRouteImport.update({
+    id: '/dashboard/report',
+    path: '/dashboard/report',
+    getParentRoute: () => ProtectedRoute,
+  } as any)
 const HomeGamesUrlRoute = HomeGamesUrlRouteImport.update({
   id: '/games/url',
   path: '/games/url',
@@ -93,6 +100,7 @@ export interface FileRoutesByFullPath {
   '/resources': typeof HomeMarketingResourcesRoute
   '/games/email': typeof HomeGamesEmailRoute
   '/games/url': typeof HomeGamesUrlRoute
+  '/dashboard/report': typeof ProtectedDashboardReportRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login/': typeof AuthLoginIndexRoute
   '/signup/': typeof AuthSignupIndexRoute
@@ -105,6 +113,7 @@ export interface FileRoutesByTo {
   '/resources': typeof HomeMarketingResourcesRoute
   '/games/email': typeof HomeGamesEmailRoute
   '/games/url': typeof HomeGamesUrlRoute
+  '/dashboard/report': typeof ProtectedDashboardReportRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login': typeof AuthLoginIndexRoute
   '/signup': typeof AuthSignupIndexRoute
@@ -121,6 +130,7 @@ export interface FileRoutesById {
   '/_home/_marketing/resources': typeof HomeMarketingResourcesRoute
   '/_home/games/email': typeof HomeGamesEmailRoute
   '/_home/games/url': typeof HomeGamesUrlRoute
+  '/_protected/dashboard/report': typeof ProtectedDashboardReportRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/signup/': typeof AuthSignupIndexRoute
@@ -135,6 +145,7 @@ export interface FileRouteTypes {
     | '/resources'
     | '/games/email'
     | '/games/url'
+    | '/dashboard/report'
     | '/api/auth/$'
     | '/login/'
     | '/signup/'
@@ -147,6 +158,7 @@ export interface FileRouteTypes {
     | '/resources'
     | '/games/email'
     | '/games/url'
+    | '/dashboard/report'
     | '/api/auth/$'
     | '/login'
     | '/signup'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
     | '/_home/_marketing/resources'
     | '/_home/games/email'
     | '/_home/games/url'
+    | '/_protected/dashboard/report'
     | '/api/auth/$'
     | '/_auth/login/'
     | '/_auth/signup/'
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_protected/dashboard/report': {
+      id: '/_protected/dashboard/report'
+      path: '/dashboard/report'
+      fullPath: '/dashboard/report'
+      preLoaderRoute: typeof ProtectedDashboardReportRouteImport
+      parentRoute: typeof ProtectedRoute
     }
     '/_home/games/url': {
       id: '/_home/games/url'
@@ -304,10 +324,12 @@ const HomeRouteChildren: HomeRouteChildren = {
 const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 
 interface ProtectedRouteChildren {
+  ProtectedDashboardReportRoute: typeof ProtectedDashboardReportRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardReportRoute: ProtectedDashboardReportRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
 }
 

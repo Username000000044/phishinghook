@@ -3,9 +3,12 @@ import { createRouter } from "@tanstack/react-router";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { toast } from "sonner";
+import { QueryClient } from "@tanstack/react-query";
 
 // Create a new router instance
 export const getRouter = () => {
+  const queryClient = new QueryClient();
+
   const router = createRouter({
     defaultNotFoundComponent: () => <h1>404 Page Not Found</h1>,
     defaultErrorComponent: ({ error, reset }) => {
@@ -29,7 +32,7 @@ export const getRouter = () => {
       }
     },
     routeTree,
-    context: {},
+    context: { queryClient },
 
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,

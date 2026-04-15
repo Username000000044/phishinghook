@@ -1,11 +1,14 @@
 import Footer from "@/components/Footer";
 import { BareHeader } from "@/components/Header";
-import { getSession } from "@/lib/auth";
+import { fetchSession } from "@/lib/auth";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected")({
-  beforeLoad: async ({ location }) => {
-    const session = await getSession();
+  beforeLoad: async ({ context }) => {
+    const session = await context.queryClient.ensureQueryData({
+      queryKey: ["session"],
+      queryFn: () => fetchSession(),
+    });
 
     if (!session) {
       throw redirect({

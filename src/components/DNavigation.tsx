@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import {
   NavigationMenuList,
   NavigationMenuItem,
@@ -8,105 +8,69 @@ import {
 } from "./ui/navigation-menu";
 import UserDropdown from "./UserDropdown";
 import { Button, buttonVariants } from "./ui/button";
-import {
-  ArrowRightFromLine,
-  CalendarPlus,
-  Eye,
-  FileDown,
-  List,
-  ListPlus,
-  LucideIcon,
-  MailSearch,
-} from "lucide-react";
+import { Bot, CalendarPlus, LucideIcon } from "lucide-react";
 import { VariantProps } from "class-variance-authority";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { Separator } from "./ui/separator";
 
 type ButtonProps = VariantProps<typeof buttonVariants>;
 type buttonVariant = NonNullable<ButtonProps["variant"]>;
 
-interface Items {
-  tooltip: string;
+interface Pages {
+  name: string;
   href: string;
-  variant: buttonVariant;
   icon: LucideIcon;
 }
 
-const navigationItems: Items[] = [
+const navigationItems: Pages[] = [
   {
-    tooltip: "Create Schedule",
+    name: "Schedule Emails",
     href: "/dashboard/schedule",
-    variant: "outline",
-    icon: ListPlus,
+    icon: CalendarPlus,
   },
   {
-    tooltip: "View Emails",
-    href: "/dashboard/emails",
-    variant: "outline",
-    icon: MailSearch,
-  },
-  {
-    tooltip: "Export Report",
-    href: "/dashboard/export",
-    variant: "outline",
-    icon: ArrowRightFromLine,
+    name: "Schedule Emails",
+    href: "/dashboard/generate",
+    icon: Bot,
   },
 ];
 
 export const DNavigation = () => {
+  const { pathname } = useLocation();
+
   return (
     <NavigationMenu className="absolute bottom-0 bg-secondary/80 border rounded-md p-2 min-w-full justify-between">
-      <div>
-        <NavigationMenuList className="!gap-2">
-          {navigationItems.map((item, index) => {
-            const isExportButton = item.tooltip
-              .toLowerCase()
-              .includes("export");
+      <NavigationMenuList className="gap-2">
+        {navigationItems.map((item, index) => {
+          let variant: buttonVariant = "ghost";
+          if (pathname === item.href) variant = "outline";
 
-            return (
-              <>
-                {isExportButton && (
-                  <Separator
-                    orientation="vertical"
-                    className="bg-white border-2"
-                  />
-                )}
-                <Tooltip>
-                  <TooltipTrigger>
-                    <NavigationMenuItem key={index}>
-                      <NavigationMenuLink asChild>
-                        <Button
-                          variant={item.variant}
-                          className="cursor-pointer"
-                        >
-                          <Link to={item.href}>
-                            <item.icon />
-                          </Link>
-                        </Button>
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  </TooltipTrigger>
-                  <TooltipContent>{item.tooltip}</TooltipContent>
-                </Tooltip>
-              </>
-            );
-          })}
-        </NavigationMenuList>
-      </div>
-      <div>
-        <NavigationMenuList>
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <UserDropdown />
-            </NavigationMenuLink>
-          </NavigationMenuItem>
-        </NavigationMenuList>
-      </div>
+          return (
+            <NavigationMenuItem key={index}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <NavigationMenuLink asChild>
+                    <Button variant={variant} className="cursor-pointer px-4">
+                      <Link to={item.href} className="flex items-center gap-2">
+                        <item.icon className="size-5" />
+                      </Link>
+                    </Button>
+                  </NavigationMenuLink>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{item.name}</p>
+                </TooltipContent>
+              </Tooltip>
+            </NavigationMenuItem>
+          );
+        })}
+      </NavigationMenuList>
+      <NavigationMenuList>
+        <NavigationMenuItem>
+          <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <UserDropdown />
+          </NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
     </NavigationMenu>
   );
 };
-
-//   <UserDropdown />

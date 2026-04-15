@@ -1,17 +1,15 @@
 import Footer from "@/components/Footer";
 import { BareHeader } from "@/components/Header";
 import { Github, GoogleOneTap } from "@/features/auth";
-import { getSession } from "@/lib/auth";
-import {
-  createFileRoute,
-  Outlet,
-  redirect,
-  useLocation,
-} from "@tanstack/react-router";
+import { fetchSession } from "@/lib/auth";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_auth")({
-  beforeLoad: async ({ location }) => {
-    const session = await getSession();
+  beforeLoad: async ({ context }) => {
+    const session = await context.queryClient.ensureQueryData({
+      queryKey: ["session"],
+      queryFn: () => fetchSession(),
+    });
 
     if (session) {
       throw redirect({
@@ -21,9 +19,6 @@ export const Route = createFileRoute("/_auth")({
     }
   },
   component: () => {
-    const location = useLocation();
-    const path = location.pathname;
-
     return (
       //  Header / Content / Footer
       <div className="grid-row-layout">

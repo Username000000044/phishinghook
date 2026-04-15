@@ -4,17 +4,12 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@ui/hover-card";
 import { KeySquare, MailQuestionMark, QrCode } from "lucide-react";
 import { Button } from "@ui/button";
 import UserDropdown from "./UserDropdown";
-import { useQuery } from "@tanstack/react-query";
-import { getSession, isAuthenticated } from "@/lib/auth";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { sessionQueryOptions } from "@/lib/auth";
 
 export default function Header() {
   // check if user isAuthenicated
-
-  const { data: session } = useQuery({
-    queryKey: ["session"],
-    queryFn: getSession,
-    staleTime: Infinity,
-  });
+  const { data: session } = useSuspenseQuery(sessionQueryOptions);
 
   return (
     <div>
