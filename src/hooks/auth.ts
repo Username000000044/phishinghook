@@ -1,17 +1,17 @@
 import { authClient } from "@/features/auth/client/auth-client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 
 export const useSignOut = () => {
-  const router = useRouter();
   const queryClient = useQueryClient();
+  const route = useRouter();
 
   const signOut = async () => {
     authClient.signOut({
       fetchOptions: {
-        onSuccess: () => {
+        onSuccess: async () => {
           queryClient.invalidateQueries({ queryKey: ["session"] });
-          router.invalidate();
+          route.invalidate();
         },
       },
     });

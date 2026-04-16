@@ -38,8 +38,8 @@ export const DNavigation = () => {
   const { pathname } = useLocation();
 
   return (
-    <NavigationMenu className="absolute bottom-0 bg-secondary/80 border rounded-md p-2 min-w-full justify-between">
-      <NavigationMenuList className="gap-2">
+    <NavigationMenu className="flex justify-between bg-secondary/80 border rounded-md p-2 min-w-full">
+      <NavigationMenuList className="gap-2 w-full">
         {navigationItems.map((item, index) => {
           let variant: buttonVariant = "ghost";
           if (pathname === item.href) variant = "outline";
@@ -48,13 +48,15 @@ export const DNavigation = () => {
             <NavigationMenuItem key={index}>
               <Tooltip>
                 <TooltipTrigger>
-                  <NavigationMenuLink asChild>
-                    <Button variant={variant} className="cursor-pointer px-4">
-                      <Link to={item.href} className="flex items-center gap-2">
-                        <item.icon className="size-5" />
-                      </Link>
-                    </Button>
-                  </NavigationMenuLink>
+                  <Button
+                    variant={variant}
+                    className="cursor-pointer px-4"
+                    asChild
+                  >
+                    <Link to={item.href} className="flex items-center gap-2">
+                      <item.icon className="size-5" />
+                    </Link>
+                  </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>{item.name}</p>
@@ -64,7 +66,7 @@ export const DNavigation = () => {
           );
         })}
       </NavigationMenuList>
-      <NavigationMenuList>
+      <NavigationMenuList className="ml-auto">
         <NavigationMenuItem>
           <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
             <UserDropdown />
