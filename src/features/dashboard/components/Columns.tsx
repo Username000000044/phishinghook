@@ -2,10 +2,11 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { User } from "better-auth";
-import { Trash2Icon } from "lucide-react";
+import { Eye, Trash2Icon } from "lucide-react";
 
 type Status = "Recieved" | "Decieved" | "Deleted";
 
@@ -86,9 +87,16 @@ export const columns: ColumnDef<Email>[] = [
     id: "actions",
     cell: ({ row }) => {
       return (
-        <div className="text-end">
+        <div className="text-end space-x-4">
           <Button
-            variant="ghost"
+            variant="empty"
+            className="h-8 w-8 text-muted hover:text-muted-foreground cursor-pointer"
+          >
+            <span className="sr-only">View</span>
+            <Eye className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="empty"
             className="h-8 w-8  text-destructive/40 hover:text-destructive cursor-pointer"
           >
             <span className="sr-only">Delete</span>

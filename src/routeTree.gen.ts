@@ -13,6 +13,7 @@ import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as HomeRouteImport } from './routes/_home'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
+import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
@@ -40,6 +41,11 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HomeRoute,
+} as any)
+const ApiChatRoute = ApiChatRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
   id: '/dashboard/',
@@ -95,6 +101,7 @@ const HomeMarketingImpactRoute = HomeMarketingImpactRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
+  '/api/chat': typeof ApiChatRoute
   '/impact': typeof HomeMarketingImpactRoute
   '/pricing': typeof HomeMarketingPricingRoute
   '/resources': typeof HomeMarketingResourcesRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
+  '/api/chat': typeof ApiChatRoute
   '/impact': typeof HomeMarketingImpactRoute
   '/pricing': typeof HomeMarketingPricingRoute
   '/resources': typeof HomeMarketingResourcesRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_home': typeof HomeRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
+  '/api/chat': typeof ApiChatRoute
   '/_home/': typeof HomeIndexRoute
   '/_home/_marketing/impact': typeof HomeMarketingImpactRoute
   '/_home/_marketing/pricing': typeof HomeMarketingPricingRoute
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/chat'
     | '/impact'
     | '/pricing'
     | '/resources'
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/chat'
     | '/impact'
     | '/pricing'
     | '/resources'
@@ -168,6 +179,7 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_home'
     | '/_protected'
+    | '/api/chat'
     | '/_home/'
     | '/_home/_marketing/impact'
     | '/_home/_marketing/pricing'
@@ -185,6 +197,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   HomeRoute: typeof HomeRouteWithChildren
   ProtectedRoute: typeof ProtectedRouteWithChildren
+  ApiChatRoute: typeof ApiChatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -217,6 +230,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof HomeRoute
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_protected/dashboard/': {
       id: '/_protected/dashboard/'
@@ -341,6 +361,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   HomeRoute: HomeRouteWithChildren,
   ProtectedRoute: ProtectedRouteWithChildren,
+  ApiChatRoute: ApiChatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

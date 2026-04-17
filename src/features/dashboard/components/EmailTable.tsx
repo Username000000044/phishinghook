@@ -48,7 +48,7 @@ export function DataTable<TData, TValue>({
                   return (
                     <TableHead
                       key={header.id}
-                      className="text-xs font-semibold p-4 hover:bg-transparent"
+                      className="text-xs font-light p-4"
                     >
                       {header.isPlaceholder
                         ? null
@@ -68,13 +68,13 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="group transition hover:scale-102 hover:shadow-xl"
+                  className="group transition hover:scale-101 shadow-xl"
                 >
                   {row.getVisibleCells().map((cell, index, cells) => (
                     <TableCell
                       key={cell.id}
                       className={cn(
-                        "p-4 bg-secondary group-hover:bg-card",
+                        "p-4",
                         // Round the left side of the first cell
                         index === 0 && "rounded-l",
                         // Round the right side of the last cell

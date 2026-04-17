@@ -8,6 +8,13 @@
       "when": 1773961212482,
       "tag": "0000_strong_blob",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1776377081804,
+      "tag": "0001_left_miss_america",
+      "breakpoints": true
     }
   ]
 }

@@ -3,9 +3,9 @@ import { tanstackStartCookies } from "better-auth/tanstack-start";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@db/index";
 import * as schema from "@/features/auth/schemas/auth.sql";
-import { emailOTP, oneTap, organization } from "better-auth/plugins";
 import { sendEmail } from "@/lib/mail";
 import { OTPEmailTemplate } from "../components/OTPEmailTemplate";
+import { emailOTP, oneTap } from "better-auth/plugins";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -20,10 +20,10 @@ export const auth = betterAuth({
       clientId: process.env.VITE_GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
-    github: { 
-      clientId: process.env.GITHUB_CLIENT_ID as string, 
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string, 
-    }, 
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    },
   },
   plugins: [
     oneTap(),
@@ -41,9 +41,8 @@ export const auth = betterAuth({
       },
       sendVerificationOnSignUp: true,
     }),
-    organization(),
     tanstackStartCookies(),
   ],
 });
 
-export type Session = typeof auth.$Infer.Session
+export type Session = typeof auth.$Infer.Session;

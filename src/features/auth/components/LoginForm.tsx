@@ -35,7 +35,7 @@ export function LoginForm() {
     onSubmit: async ({ value: { email, password } }) => {
       const rememberMe = form.state.values.remember_me;
 
-      await authClient.signIn.email({
+      authClient.signIn.email({
         email, // required
         password, // required
         rememberMe: rememberMe,

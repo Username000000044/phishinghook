@@ -1,14 +1,31 @@
 services:
   db:
-    image: postgres:17.0
+    image: postgres:18
+    # restart: always
     hostname: ${DATABASE_HOST}
     ports:
-      - '5432:${DATABASE_PORT}'
+      - "5432:${DATABASE_PORT}"
     environment:
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_DB=${DATABASE_NAME}
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/18/docker
+  ollama:
+    image: ollama/ollama:latest
+    # restart: unless-stopped
+    ports:
+      - "11434:11434"
+    # Tells docker the computer needs Nvidia GPU to start
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1 # Or 'all'
+              capabilities: [gpu]
+    volumes:
+      - ollama_data:/root/.ollama
 volumes:
   pgdata:
+  ollama_data:
