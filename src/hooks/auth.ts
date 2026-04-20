@@ -1,6 +1,6 @@
 import { authClient } from "@/features/auth/client/auth-client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useRouteContext, useRouter } from "@tanstack/react-router";
 
 export const useSignOut = () => {
   const queryClient = useQueryClient();
@@ -19,3 +19,13 @@ export const useSignOut = () => {
 
   return signOut;
 };
+
+export function useSession() {
+  return useRouteContext({ from: "__root__" }).session;
+}
+
+export function useRequiredSession() {
+  const session = useSession();
+  if (!session) throw new Error("Session missing in protected route");
+  return session;
+}

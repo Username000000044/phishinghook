@@ -37,7 +37,7 @@ export const PricingCard = ({ pricingData }: { pricingData: PricingPlan }) => {
 
   const RegularCard = () => {
     return (
-      <Card className="bg-background hover:bg-secondary transition duration-300 ease-in-out w-80 md:w-100 h-full">
+      <Card className="bg-background hover:bg-secondary transition duration-300 ease-in-out w-80 md:w-100 h-full border-none">
         <CardHeader>
           <p className="text-sm font-thin">{pricingData.title.toUpperCase()}</p>
 
@@ -83,7 +83,7 @@ export const PricingCard = ({ pricingData }: { pricingData: PricingPlan }) => {
 
   const PopularCard = () => {
     return (
-      <Card className="bg-secondary hover:bg-card transition duration-300 ease-in-out w-80 md:w-100 h-full">
+      <Card className="bg-secondary hover:bg-card transition duration-300 ease-in-out w-80 md:w-100 h-full  border-none">
         <CardHeader>
           <CardTitle className="flex justify-between items-center flex-wrap p-0 gap-0 w-full">
             <p className="text-sm font-thin">
@@ -132,19 +132,6 @@ export const PricingCard = ({ pricingData }: { pricingData: PricingPlan }) => {
         </CardFooter>
       </Card>
     );
-
-    {
-      /* <CardAction>
-            {pricingData.most_popular ? (
-              <Badge
-                variant="outline"
-                className="!border-primary/20 text-primary/80 py-1 px-3 rounded-full"
-              >
-                Most Popular
-              </Badge>
-            ) : null}
-          </CardAction> */
-    }
   };
 
   return (

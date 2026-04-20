@@ -1,28 +1,22 @@
 import Footer from "@/components/Footer";
 import { BareHeader } from "@/components/Header";
-
-import { fetchSession } from "@/lib/auth";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { SessionRouteContext } from "@/types/router";
 
-export const Route = createFileRoute("/_protected")({
+export const Route = createFileRoute("/_protected")<{
+  RouteContext: SessionRouteContext;
+}>({
   beforeLoad: async ({ context, location }) => {
-    const session = await context.queryClient.fetchQuery({
-      queryKey: ["session"],
-      queryFn: () => fetchSession(),
-    });
-
-    if (!session) {
+    if (!context.session) {
       throw redirect({
         to: "/login",
         search: { redirect: location.href },
       });
     }
-
-    return { session };
   },
   component: () => (
     <div className="grid-row-layout">
-      <BareHeader />
+      <BareHeader className="mb-21" />
       <Outlet />
       <Footer />
     </div>

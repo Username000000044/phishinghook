@@ -13,12 +13,12 @@ import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as HomeRouteImport } from './routes/_home'
 import { Route as AuthRouteImport } from './routes/_auth'
 import { Route as HomeIndexRouteImport } from './routes/_home/index'
-import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as ProtectedDashboardIndexRouteImport } from './routes/_protected/dashboard/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as ProtectedDashboardReportRouteImport } from './routes/_protected/dashboard/report'
+import { Route as ProtectedDashboardTeamRouteImport } from './routes/_protected/dashboard/team'
+import { Route as ProtectedDashboardScheduleRouteImport } from './routes/_protected/dashboard/schedule'
 import { Route as HomeGamesUrlRouteImport } from './routes/_home/games/url'
 import { Route as HomeGamesEmailRouteImport } from './routes/_home/games/email'
 import { Route as HomeMarketingResourcesRouteImport } from './routes/_home/_marketing/resources'
@@ -42,11 +42,6 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HomeRoute,
 } as any)
-const ApiChatRoute = ApiChatRouteImport.update({
-  id: '/api/chat',
-  path: '/api/chat',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ProtectedDashboardIndexRoute = ProtectedDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
@@ -67,10 +62,15 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProtectedDashboardReportRoute =
-  ProtectedDashboardReportRouteImport.update({
-    id: '/dashboard/report',
-    path: '/dashboard/report',
+const ProtectedDashboardTeamRoute = ProtectedDashboardTeamRouteImport.update({
+  id: '/dashboard/team',
+  path: '/dashboard/team',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedDashboardScheduleRoute =
+  ProtectedDashboardScheduleRouteImport.update({
+    id: '/dashboard/schedule',
+    path: '/dashboard/schedule',
     getParentRoute: () => ProtectedRoute,
   } as any)
 const HomeGamesUrlRoute = HomeGamesUrlRouteImport.update({
@@ -101,13 +101,13 @@ const HomeMarketingImpactRoute = HomeMarketingImpactRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof HomeIndexRoute
-  '/api/chat': typeof ApiChatRoute
   '/impact': typeof HomeMarketingImpactRoute
   '/pricing': typeof HomeMarketingPricingRoute
   '/resources': typeof HomeMarketingResourcesRoute
   '/games/email': typeof HomeGamesEmailRoute
   '/games/url': typeof HomeGamesUrlRoute
-  '/dashboard/report': typeof ProtectedDashboardReportRoute
+  '/dashboard/schedule': typeof ProtectedDashboardScheduleRoute
+  '/dashboard/team': typeof ProtectedDashboardTeamRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login/': typeof AuthLoginIndexRoute
   '/signup/': typeof AuthSignupIndexRoute
@@ -115,13 +115,13 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof HomeIndexRoute
-  '/api/chat': typeof ApiChatRoute
   '/impact': typeof HomeMarketingImpactRoute
   '/pricing': typeof HomeMarketingPricingRoute
   '/resources': typeof HomeMarketingResourcesRoute
   '/games/email': typeof HomeGamesEmailRoute
   '/games/url': typeof HomeGamesUrlRoute
-  '/dashboard/report': typeof ProtectedDashboardReportRoute
+  '/dashboard/schedule': typeof ProtectedDashboardScheduleRoute
+  '/dashboard/team': typeof ProtectedDashboardTeamRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/login': typeof AuthLoginIndexRoute
   '/signup': typeof AuthSignupIndexRoute
@@ -132,14 +132,14 @@ export interface FileRoutesById {
   '/_auth': typeof AuthRouteWithChildren
   '/_home': typeof HomeRouteWithChildren
   '/_protected': typeof ProtectedRouteWithChildren
-  '/api/chat': typeof ApiChatRoute
   '/_home/': typeof HomeIndexRoute
   '/_home/_marketing/impact': typeof HomeMarketingImpactRoute
   '/_home/_marketing/pricing': typeof HomeMarketingPricingRoute
   '/_home/_marketing/resources': typeof HomeMarketingResourcesRoute
   '/_home/games/email': typeof HomeGamesEmailRoute
   '/_home/games/url': typeof HomeGamesUrlRoute
-  '/_protected/dashboard/report': typeof ProtectedDashboardReportRoute
+  '/_protected/dashboard/schedule': typeof ProtectedDashboardScheduleRoute
+  '/_protected/dashboard/team': typeof ProtectedDashboardTeamRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
   '/_auth/signup/': typeof AuthSignupIndexRoute
@@ -149,13 +149,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/api/chat'
     | '/impact'
     | '/pricing'
     | '/resources'
     | '/games/email'
     | '/games/url'
-    | '/dashboard/report'
+    | '/dashboard/schedule'
+    | '/dashboard/team'
     | '/api/auth/$'
     | '/login/'
     | '/signup/'
@@ -163,13 +163,13 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/api/chat'
     | '/impact'
     | '/pricing'
     | '/resources'
     | '/games/email'
     | '/games/url'
-    | '/dashboard/report'
+    | '/dashboard/schedule'
+    | '/dashboard/team'
     | '/api/auth/$'
     | '/login'
     | '/signup'
@@ -179,14 +179,14 @@ export interface FileRouteTypes {
     | '/_auth'
     | '/_home'
     | '/_protected'
-    | '/api/chat'
     | '/_home/'
     | '/_home/_marketing/impact'
     | '/_home/_marketing/pricing'
     | '/_home/_marketing/resources'
     | '/_home/games/email'
     | '/_home/games/url'
-    | '/_protected/dashboard/report'
+    | '/_protected/dashboard/schedule'
+    | '/_protected/dashboard/team'
     | '/api/auth/$'
     | '/_auth/login/'
     | '/_auth/signup/'
@@ -197,7 +197,6 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRouteWithChildren
   HomeRoute: typeof HomeRouteWithChildren
   ProtectedRoute: typeof ProtectedRouteWithChildren
-  ApiChatRoute: typeof ApiChatRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -231,13 +230,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeIndexRouteImport
       parentRoute: typeof HomeRoute
     }
-    '/api/chat': {
-      id: '/api/chat'
-      path: '/api/chat'
-      fullPath: '/api/chat'
-      preLoaderRoute: typeof ApiChatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_protected/dashboard/': {
       id: '/_protected/dashboard/'
       path: '/dashboard'
@@ -266,11 +258,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_protected/dashboard/report': {
-      id: '/_protected/dashboard/report'
-      path: '/dashboard/report'
-      fullPath: '/dashboard/report'
-      preLoaderRoute: typeof ProtectedDashboardReportRouteImport
+    '/_protected/dashboard/team': {
+      id: '/_protected/dashboard/team'
+      path: '/dashboard/team'
+      fullPath: '/dashboard/team'
+      preLoaderRoute: typeof ProtectedDashboardTeamRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/dashboard/schedule': {
+      id: '/_protected/dashboard/schedule'
+      path: '/dashboard/schedule'
+      fullPath: '/dashboard/schedule'
+      preLoaderRoute: typeof ProtectedDashboardScheduleRouteImport
       parentRoute: typeof ProtectedRoute
     }
     '/_home/games/url': {
@@ -344,12 +343,14 @@ const HomeRouteChildren: HomeRouteChildren = {
 const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 
 interface ProtectedRouteChildren {
-  ProtectedDashboardReportRoute: typeof ProtectedDashboardReportRoute
+  ProtectedDashboardScheduleRoute: typeof ProtectedDashboardScheduleRoute
+  ProtectedDashboardTeamRoute: typeof ProtectedDashboardTeamRoute
   ProtectedDashboardIndexRoute: typeof ProtectedDashboardIndexRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
-  ProtectedDashboardReportRoute: ProtectedDashboardReportRoute,
+  ProtectedDashboardScheduleRoute: ProtectedDashboardScheduleRoute,
+  ProtectedDashboardTeamRoute: ProtectedDashboardTeamRoute,
   ProtectedDashboardIndexRoute: ProtectedDashboardIndexRoute,
 }
 
@@ -361,7 +362,6 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRouteWithChildren,
   HomeRoute: HomeRouteWithChildren,
   ProtectedRoute: ProtectedRouteWithChildren,
-  ApiChatRoute: ApiChatRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport

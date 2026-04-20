@@ -32,6 +32,9 @@ export const auth = betterAuth({
         if (type === "email-verification") {
           await sendEmail({
             data: {
+              from:
+                process.env.RESEND_EMAIL_FROM ||
+                "PhishingHook <onboarding@resend.dev>",
               to: [email],
               subject: "Account verification OTP",
               react: OTPEmailTemplate({ email, otp }),

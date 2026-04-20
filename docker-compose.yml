@@ -22,7 +22,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1 # Or 'all'
+              count: all # Or 'all'
               capabilities: [gpu]
     volumes:
       - ollama_data:/root/.ollama

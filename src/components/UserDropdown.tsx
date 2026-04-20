@@ -11,15 +11,13 @@ import {
 } from "./ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useLocation, useRouter } from "@tanstack/react-router";
-import { useSignOut } from "@/hooks/auth";
+import { useSession, useSignOut } from "@/hooks/auth";
 import { useState } from "react";
-import { sessionQueryOptions } from "@/lib/auth";
-import { useSuspenseQuery } from "@tanstack/react-query";
 
 export default function UserDropdown() {
   const signOut = useSignOut();
   const router = useRouter();
-  const { data: session } = useSuspenseQuery(sessionQueryOptions);
+  const session = useSession();
 
   const [isOpen, setIsOpen] = useState(false);
 

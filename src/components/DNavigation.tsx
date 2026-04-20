@@ -8,7 +8,7 @@ import {
 } from "./ui/navigation-menu";
 import UserDropdown from "./UserDropdown";
 import { Button, buttonVariants } from "./ui/button";
-import { Bot, CalendarPlus, LucideIcon } from "lucide-react";
+import { Bot, CalendarPlus, LucideIcon, Mailbox, User } from "lucide-react";
 import { VariantProps } from "class-variance-authority";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
@@ -23,14 +23,19 @@ interface Pages {
 
 const navigationItems: Pages[] = [
   {
-    name: "Schedule Emails",
+    name: "View",
+    href: "/dashboard",
+    icon: Mailbox,
+  },
+  {
+    name: "Schedule",
     href: "/dashboard/schedule",
     icon: CalendarPlus,
   },
   {
-    name: "Schedule Emails",
-    href: "/dashboard/generate",
-    icon: Bot,
+    name: "Team",
+    href: "/dashboard/team",
+    icon: User,
   },
 ];
 
@@ -38,7 +43,7 @@ export const DNavigation = () => {
   const { pathname } = useLocation();
 
   return (
-    <NavigationMenu className="flex justify-between bg-secondary/80 border rounded-md p-2 min-w-full">
+    <NavigationMenu className="flex justify-between bg-secondary/40 rounded-md p-2 min-w-full">
       <NavigationMenuList className="gap-2 w-full">
         {navigationItems.map((item, index) => {
           let variant: buttonVariant = "ghost";
@@ -55,6 +60,7 @@ export const DNavigation = () => {
                   >
                     <Link to={item.href} className="flex items-center gap-2">
                       <item.icon className="size-5" />
+                      <span className="hidden md:block">{item.name}</span>
                     </Link>
                   </Button>
                 </TooltipTrigger>

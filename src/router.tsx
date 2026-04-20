@@ -32,10 +32,12 @@ export const getRouter = () => {
       }
     },
     routeTree,
-    context: { queryClient },
+    context: {
+      queryClient,
+    },
 
     scrollRestoration: true,
-    defaultPreloadStaleTime: 0,
+    defaultPreloadStaleTime: Infinity,
   });
   return router;
 };

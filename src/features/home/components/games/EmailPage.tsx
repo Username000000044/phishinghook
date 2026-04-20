@@ -14,7 +14,7 @@ export function EmailPage() {
   const [result, setResult] = useState<Result>();
 
   return (
-    <div className="container grid-col-layout mt-30">
+    <div className="container grid-col-layout">
       {/* Game */}
       <section className="col-span-full xl:col-span-10">
         {stage == "start" && <StartMenu setStage={setStage} />}

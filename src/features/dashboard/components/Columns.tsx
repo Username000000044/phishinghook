@@ -1,21 +1,12 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
+import { useRequiredSession } from "@/hooks/auth";
 import { cn } from "@/lib/utils";
+import { Email } from "@/types/emails";
 import { ColumnDef } from "@tanstack/react-table";
-import { User } from "better-auth";
 import { Eye, Trash2Icon } from "lucide-react";
-
-type Status = "Recieved" | "Decieved" | "Deleted";
-
-export type Email = {
-  id: string; //some string associated with email.
-  user: User;
-  status: Status;
-  sent_date: string;
-};
 
 export const columns: ColumnDef<Email>[] = [
   {
@@ -44,16 +35,21 @@ export const columns: ColumnDef<Email>[] = [
     accessorKey: "user_id",
     header: "USER",
     cell: ({ row }) => {
-      const user = row.original.user;
+      const columnUser = row.original.user;
+      const session = useRequiredSession();
 
       return (
         <div className="flex items-center gap-4">
           <Avatar size="lg">
-            <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+            <AvatarImage
+              src={session?.user.image || undefined}
+              alt="User Image"
+            />
+            <AvatarFallback>{columnUser.name.substring(0, 2)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <p>{user.name}</p>
-            <p className="text-muted-foreground">{user.email}</p>
+            <p>{columnUser.name}</p>
+            <p className="text-muted-foreground">{columnUser.email}</p>
           </div>
         </div>
       );

@@ -12,49 +12,54 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import appCss from "../styles.css?url";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { fetchSession } from "@/lib/auth";
-import { Suspense } from "react";
+import { sessionQueryOptions } from "@/lib/auth";
+import { useEffect } from "react";
 
-const queryClient = new QueryClient();
+export interface RouterContext {
+  queryClient: QueryClient;
+}
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
-  {
-    head: () => ({
-      meta: [
-        {
-          charSet: "utf-8",
-        },
-        {
-          name: "viewport",
-          content: "width=device-width, initial-scale=1",
-        },
-        {
-          title: "Phishing Hook",
-          content:
-            "An innovative solution to security based phishing training to level up your online safety.",
-        },
-      ],
-      links: [
-        {
-          rel: "stylesheet",
-          href: appCss,
-        },
-      ],
-    }),
+export const Route = createRootRouteWithContext<RouterContext>()({
+  head: () => ({
+    meta: [
+      {
+        charSet: "utf-8",
+      },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
+      },
+      {
+        title: "Phishing Hook",
+        content:
+          "An innovative solution to security based phishing training to level up your online safety.",
+      },
+    ],
+    links: [
+      {
+        rel: "stylesheet",
+        href: appCss,
+      },
+    ],
+  }),
 
-    beforeLoad: async () => {
-      await queryClient.ensureQueryData({
-        queryKey: ["session"],
-        queryFn: () => fetchSession(),
-      });
-    },
-    shellComponent: RootComponent,
+  beforeLoad: async ({ context }) => {
+    const session =
+      await context.queryClient.ensureQueryData(sessionQueryOptions);
+
+    return { session };
   },
-);
+
+  shellComponent: RootComponent,
+});
 
 function RootComponent() {
   // This pulls the specific queryClient instance created in your router file
-  const { queryClient } = Route.useRouteContext();
+  const { queryClient, session } = Route.useRouteContext();
+
+  useEffect(() => {
+    queryClient.setQueryData(["session"], session);
+  }, [queryClient, session]);
 
   return (
     <RootDocument queryClient={queryClient}>
@@ -76,15 +81,13 @@ function RootDocument({
         <HeadContent />
       </head>
       <body>
-        <Suspense fallback={<p>Loading...</p>}>
-          <QueryClientProvider client={queryClient}>
-            <div className="dotted-background">
-              <TooltipProvider>{children}</TooltipProvider>
-            </div>
-            <Toaster />
-            <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
-        </Suspense>
+        <QueryClientProvider client={queryClient}>
+          <div className="dotted-background">
+            <TooltipProvider>{children}</TooltipProvider>
+          </div>
+          <Toaster />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
         <TanStackDevtools
           config={{
             position: "bottom-right",

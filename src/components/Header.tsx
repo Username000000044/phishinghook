@@ -4,12 +4,11 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@ui/hover-card";
 import { KeySquare, MailQuestionMark, QrCode } from "lucide-react";
 import { Button } from "@ui/button";
 import UserDropdown from "./UserDropdown";
-import { useSuspenseQuery } from "@tanstack/react-query";
-import { sessionQueryOptions } from "@/lib/auth";
+import { useSession } from "@/hooks/auth";
 
 export default function Header() {
   // check if user isAuthenicated
-  const { data: session } = useSuspenseQuery(sessionQueryOptions);
+  const session = useSession();
 
   return (
     <div>
@@ -125,7 +124,7 @@ export default function Header() {
   );
 }
 
-export function BareHeader() {
+export function BareHeader({ className }: { className: string }) {
   return (
     <div>
       {/* Inorganic Shape */}
@@ -143,7 +142,7 @@ export function BareHeader() {
         />
       </svg>
 
-      <header className="w-full px-4 mt-13 mb-25 md:mb-30 md:px-8">
+      <header className={`${className} w-full px-4 mt-13 md:px-8`}>
         {/* left */}
         <div className="flex items-center gap-5">
           <Link to="/">

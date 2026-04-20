@@ -1,5 +1,6 @@
 import {
   AlertDialog,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -7,35 +8,60 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
-import { Textarea } from "@/components/ui/textarea";
-import { Brain, MailOpen } from "lucide-react";
-import React, { useState } from "react";
-import { useChat, fetchServerSentEvents } from "@tanstack/ai-react";
+import { Input } from "@/components/ui/input";
+import { Brain, MailOpen, Plus, Send, X } from "lucide-react";
+import { useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { ollamaChat, sendOllamaEmail } from "../utils/ollama";
+import { useRequiredSession } from "@/hooks/auth";
+import { toast } from "sonner";
+import { Email } from "@/types/emails";
 
-export const DemoDialog = () => {
+export const DemoDialog = ({
+  onEmailAdded,
+}: {
+  onEmailAdded: (newEmail: Email) => void;
+}) => {
+  const session = useRequiredSession();
+
   const [input, setInput] = useState("");
+  const [items, setItems] = useState<string[]>([]);
+  const [open, setOpen] = useState(false);
 
-  const { messages, sendMessage, isLoading, error } = useChat({
-    connection: fetchServerSentEvents("/api/chat"),
-    onFinish: () => {
-      console.log("Stream finished");
-      console.log(messages);
-    },
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const {
+    mutate: handleGenerate,
+    data,
+    isPending,
+    isSuccess,
+    isError,
+    error,
+    reset,
+  } = useMutation({
+    mutationFn: (items: string[]) => ollamaChat({ data: items }),
   });
 
-  function handleSubmit(e: React.SubmitEvent) {
-    e.preventDefault();
-    if (input.trim() && !isLoading) {
-      // Send the actual user input
-      sendMessage("how are you doing today?"); // {input}
-      setInput("");
-    }
+  function addItem() {
+    setInput("");
+    setItems((prev) => [...prev, input]);
+    inputRef.current?.focus();
+  }
+
+  async function sendAIEmail() {
+    if (!data) return;
+    await sendOllamaEmail({
+      data: { user: session.user, email: data },
+    });
+
+    // add item to table
   }
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={() => setOpen(!open)}>
       <AlertDialogTrigger asChild>
         <Button
           size="sm"
@@ -46,49 +72,123 @@ export const DemoDialog = () => {
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="sm:max-w-sm">
-        <form onSubmit={handleSubmit} id="demo-form" className="space-y-4">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Create Demo</AlertDialogTitle>
-            <AlertDialogDescription>
-              Enter some details about yourself then press{" "}
-              <span className="text-xs text-primary">GENERATE</span> to have AI
-              create your personalized email.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          {!isLoading && (
-            <>
-              <Field>
-                <Textarea
-                  placeholder="Enter here:"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              </Field>
+        <AlertDialogHeader>
+          <div className="flex justify-between w-full">
+            <AlertDialogTitle>Demo Email</AlertDialogTitle>
+            <AlertDialogCancel size="icon-xs" asChild>
+              <Button
+                variant="secondary"
+                size="icon-xs"
+                onClick={() => {
+                  reset();
+                  setInput("");
+                  setItems([]);
+                }}
+              >
+                <X />
+              </Button>
+            </AlertDialogCancel>
+          </div>
+        </AlertDialogHeader>
+        <AlertDialogDescription className="text-sm">
+          To <span className="text-xs text-primary">GENERATE</span>, enter
+          topics that should be included in the email .{" "}
+        </AlertDialogDescription>
 
-              <p className="text-sm text-muted">
-                Example: Finance, Enterprise, Analyst Position, Bonus
-              </p>
-            </>
-          )}
-
-          {error && <p className="text-destructive text-sm">{error.message}</p>}
-
-          <AlertDialogFooter>
+        {/* Input */}
+        <div className="my-4">
+          <Field orientation="horizontal">
+            <Input
+              ref={inputRef}
+              type="search"
+              placeholder="Add item..."
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key == "Enter" && input.trim().length >= 2) {
+                  addItem();
+                }
+              }}
+              value={input}
+              maxLength={25}
+              autoFocus
+            />
             <Button
-              type="submit"
-              disabled={isLoading || !input.trim()}
+              onClick={addItem}
+              disabled={input.length == 0 || input.trim().length < 2}
               className="cursor-pointer"
             >
-              {isLoading ? (
+              <Plus />
+            </Button>
+          </Field>
+
+          {/* Items */}
+          <div className="flex gap-2 flex-wrap mt-4">
+            {items.map((item, idx) => (
+              <Badge
+                variant="outline"
+                className="text-muted-foreground hover:bg-destructive/20 cursor-pointer"
+                onClick={() =>
+                  setItems((prev) => prev.filter((_, i) => i !== idx))
+                }
+                key={idx}
+              >
+                {item}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        {/* AI Error */}
+        {isError && <p className="text-destructive">{error.message}</p>}
+
+        {/* Buttons */}
+        <AlertDialogFooter>
+          {isSuccess ? (
+            <Button
+              variant="outline"
+              className="cursor-pointer w-full"
+              onClick={async () => {
+                await sendAIEmail();
+                toast.success("Sent Demo Email!");
+
+                //Add to email list
+                onEmailAdded({
+                  id: "728e252f",
+                  user: session.user,
+                  sent_date: String(
+                    new Date().toLocaleDateString("en-US", {
+                      month: "numeric",
+                      day: "numeric",
+                      year: "numeric",
+                    }),
+                  ),
+                  status: "Recieved",
+                });
+
+                // Close alert
+                setOpen(false);
+              }}
+            >
+              <Send /> Send
+            </Button>
+          ) : (
+            <Button
+              className="cursor-pointer w-full"
+              variant="default"
+              disabled={items.length <= 0 || isPending}
+              onClick={() => handleGenerate(items)}
+            >
+              {isPending ? (
                 <span className="animate-bounce">Generating...</span>
               ) : (
-                <>
-                  <Brain /> Generate
-                </>
+                <span className="flex gap-2 items-center">
+                  <Brain />
+                  Generate
+                </span>
               )}
             </Button>
-          </AlertDialogFooter>
-        </form>
+          )}
+        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
